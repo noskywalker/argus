@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="funcBeanMapper">
+
+    <resultMap id="FuncResultMap" type="com.monitor.argus.bean.system.FuncBean">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="func_uri" property="funcUri" jdbcType="VARCHAR"/>
+        <result column="auth_id" property="authId" jdbcType="INTEGER"/>
+        <result column="auth_name" property="authName" jdbcType="VARCHAR"/>
+        <result column="OPERATOR_ID" property="operatorId" jdbcType="INTEGER"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Func_Column_List">
+        id,func_uri,auth_id,auth_name,create_time,operator_id
+    </sql>
+
+    <sql id="getFuncColumn">
+        f.id as id,
+        f.func_uri as funcUri,
+        f.auth_id as authId,
+        f.auth_name as authName,
+        f.create_time as createTime,
+        f.operator_id as operatorId
+
+    </sql>
+
+    <select id="selectFuncByPrimaryKey" resultMap="FuncResultMap" parameterType="map">
+        SELECT
+        <include refid="Func_Column_List"/>
+        from argus.t_argus_system_func_auth
+        WHERE id= #{id}
+
+    </select>
+
+    <insert id="insertFuncSelective" parameterType="map">
+        insert into argus.t_argus_system_func_auth
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="funcUri != null and funcUri.length() > 0">
+                func_uri,
+            </if>
+            <if test="authId != null and authId > 0">
+                auth_id,
+            </if>
+            <if test="authName != null and authName.length()  > 0">
+                auth_name,
+            </if>
+            <if test="operatorId != null and operatorId > 0">
+                operator_id,
+            </if>
+            create_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="funcUri != null and funcUri.length() > 0">
+                #{funcUri},
+            </if>
+            <if test="authId != null and authId > 0">
+                #{authId},
+            </if>
+            <if test="authName != null and authName.length() > 0">
+                #{authName},
+            </if>
+            <if test="operatorId != null and operatorId>0">
+                #{operatorId},
+            </if>
+            now()
+        </trim>
+    </insert>
+
+    <update id="updateFuncByPrimaryKeySelective" parameterType="map">
+        update argus.t_argus_system_func_auth
+        <set>
+            <if test="funcUri != null and funcUri.length() > 0">
+                func_uri = #{funcUri},
+            </if>
+            <if test="authId != null and authId > 0">
+                auth_id = #{authId},
+            </if>
+            <if test="authName != null and authName.length() >0">
+                auth_name = #{authName},
+            </if>
+            <if test="operatorId != null and operatorId>0">
+                operator_id = #{operatorId}
+            </if>
+        </set>
+        where id = #{id}
+
+    </update>
+
+    <sql id="getFuncCondition">
+        <if test="id != null and id != '' ">f.id = #{id,jdbcType=VARCHAR}</if>
+        <if test="funcUri != null and funcUri != '' ">and f.func_uri like CONCAT
+            ('%',#{funcUri,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="authId != null and authId > 0">and f.auth_id = #{authId}</if>
+    </sql>
+
+    <!-- 查询功能列表 -->
+    <select id="getFuncBean" resultMap="FuncResultMap"
+            parameterType="map">
+        select
+        <include refid="getFuncColumn"/>
+        from argus.t_argus_system_func_auth f
+        <where>
+            <include refid="getFuncCondition"/>
+        </where>
+        order by create_time desc
+    </select>
+
+    <!-- 查询功能列表分页 -->
+    <select id="getFuncBeanList" resultMap="FuncResultMap"
+            parameterType="map">
+        select
+        <include refid="getFuncColumn"/>
+        from argus.t_argus_system_func_auth f
+        <where>
+            <include refid="getFuncCondition"/>
+        </where>
+        order by create_time desc
+        <if test="rows!=null and rows != 0">
+            limit #{pageStart},#{rows}
+        </if>
+    </select>
+
+    <!-- 查询功能列表记录数 -->
+    <select id="getFuncBeanListCount" resultType="INT"
+            parameterType="map">
+        select count(0) from argus.t_argus_system_func_auth f
+        <where>
+            <include refid="getFuncCondition"/>
+        </where>
+    </select>
+
+    <delete id="deleteFuncBean" parameterType="map">
+        delete from argus.t_argus_system_func_auth
+        where id=#{funcId}
+    </delete>
+
+    <select id="getListByAuth" parameterType="map" resultMap="FuncResultMap">
+        select
+        <include refid="getFuncColumn"/>
+        from argus.t_argus_system_func_auth f
+        where f.auth_id in(
+        <foreach collection="list" item="item" index="index" separator=",">
+            #{item}
+        </foreach>
+        )
+    </select>
+
+    <update id="updateAuthInfo" parameterType="map">
+        update argus.t_argus_system_func_auth
+        set auth_name = #{authName}
+         where auth_id = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorator="layout/fullPersonInfo">
+<body>
+<div layout:fragment="content">
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">个人信息</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        个人信息
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="dataTable_wrapper">
+                            <div>
+                                Email &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="email" type="text" name=""></input><br/><br/>
+                                UserName &nbsp;&nbsp;<input id="userName" type="text" name=""></input><br/><br/>
+                                Phone&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="phone" type="text" name=""></input><br/><br/>
+
+                                <button onclick="onSubmitClick();" class="btn btn-success">提交</button> &nbsp;&nbsp;&nbsp;<a onclick="onChangeClick();" href="javascript:void(0);">修改密码</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="./js/jquery.js"></script>
+<script type="text/javascript" src="./js/jquery.artDialog.js"></script>
+</html>

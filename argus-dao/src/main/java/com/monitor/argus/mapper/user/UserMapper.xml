@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="userMapper">
+    <resultMap id="BaseResultMap" type="com.monitor.argus.bean.user.UserEntity">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="USER_NAME" property="userName" jdbcType="VARCHAR"/>
+        <result column="TELEPHONE" property="telephone" jdbcType="VARCHAR"/>
+        <result column="CELL_PHONE" property="cellphone" jdbcType="VARCHAR"/>
+        <result column="EMAIL" property="email" jdbcType="VARCHAR"/>
+        <result column="WEIXIN" property="weixin" jdbcType="VARCHAR"/>
+        <result column="QQ" property="qq" jdbcType="VARCHAR"/>
+        <result column="DEPARTMENT" property="department" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="open_id" property="openId" jdbcType="VARCHAR"/>
+        <result column="sence" property="sence" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="WXResultMap" type="com.monitor.argus.bean.user.WXInfoEntity">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="open_id" property="openId" jdbcType="VARCHAR"/>
+        <result column="nick_name" property="nickName" jdbcType="VARCHAR"/>
+        <result column="head_img_url" property="headImgUrl" jdbcType="VARCHAR"/>
+        <result column="sence" property="sence" jdbcType="VARCHAR"/>
+        <result column="enable" property="enable" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    ID, USER_NAME, TELEPHONE, CELL_PHONE, EMAIL, WEIXIN, QQ, DEPARTMENT,open_id,sence
+  </sql>
+    <sql id="Wx_Column_List">
+        id,open_id,nick_name,head_img_url,sence,enable
+    </sql>
+    <select id="selectAllUser" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_argus_user
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from t_argus_user
+        where ID = #{id,jdbcType=VARCHAR}
+    </select>
+    <insert id="insert" parameterType="com.monitor.argus.bean.user.UserEntity">
+        insert into t_argus_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id.length() > 0">
+                ID,
+            </if>
+            <if test="userName != null and userName.length() > 0">
+                USER_NAME,
+            </if>
+            <if test="telephone != null and telephone.length() >0">
+                TELEPHONE,
+            </if>
+            <if test = "cellphone !=null and cellphone.length() > 0">
+                CELL_PHONE,
+            </if>
+            <if test="email != null and email.length() > 0">
+                EMAIL,
+            </if>
+            <if test="weixin != null and weixin.length() > 0">
+                weixin,
+            </if>
+            <if test="qq != null and qq.length() > 0">
+                QQ,
+            </if>
+            <if test="department != null and department.length() >0">
+                DEPARTMENT,
+            </if>
+            <if test="openId != null and openId.length() > 0">
+                open_id,
+            </if>
+                CREATE_DATE
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id.length() > 0">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null and userName.length() > 0">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="telephone != null and telephone.length() >0">
+                #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test = "cellphone !=null and cellphone.length() > 0">
+                #{cellphone,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null and email.length() > 0">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="weixin != null and weixin.length() > 0">
+                #{weixin,jdbcType=VARCHAR},
+            </if>
+            <if test="qq != null and qq.length() > 0">
+                #{qq,jdbcType=VARCHAR},
+            </if>
+            <if test="department != null and department.length() >0">
+                #{department,jdbcType=VARCHAR},
+            </if>
+            <if test="openId != null and openId.length() > 0">
+                #{openId},
+            </if>
+                now()
+        </trim>
+  </insert>
+
+    <update id="updateUser" parameterType="com.monitor.argus.bean.user.UserEntity">
+        update t_argus_user
+        <set>
+            <if test="userName != null">
+                USER_NAME = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="telephone != null">
+                TELEPHONE = #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="cellphone != null">
+                CELL_PHONE = #{cellphone,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                EMAIL = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="weixin != null">
+                WEIXIN = #{weixin,jdbcType=VARCHAR},
+            </if>
+            <if test="qq != null">
+                QQ = #{qq,jdbcType=VARCHAR},
+            </if>
+            <if test="department != null">
+                DEPARTMENT = #{department,jdbcType=VARCHAR},
+            </if>
+            <if test="openId != null">
+                open_id = #{openId},
+            </if>
+            <if test="sence != null and sence.length() > 0">
+                sence = #{sence}
+            </if>
+        </set>
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="insertWXInfo" parameterType="map">
+        insert into argus.t_argus_wxinfo_temp
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="openId != null and openId.length() > 0">
+                open_id,
+            </if>
+            <if test="nickName != null and nickName.length() > 0">
+                nick_name,
+            </if>
+            <if test="headImgUrl != null and headImgUrl.length() > 0">
+                head_img_url,
+            </if>
+            <if test="sence!= null and sence.length() > 0">
+                sence
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="openId != null and openId.length() > 0">
+                #{openId},
+            </if>
+            <if test="nickName != null and nickName.length() > 0">
+                #{nickName},
+            </if>
+            <if test="headImgUrl != null and headImgUrl.length() > 0">
+                #{headImgUrl},
+            </if>
+            <if test="sence!= null and sence.length() > 0">
+                #{sence}
+            </if>
+        </trim>
+    </insert>
+
+    <select id="getWXInfoList" parameterType="map" resultMap="WXResultMap">
+        select
+        <include refid="Wx_Column_List"/>
+        from argus.t_argus_wxinfo_temp where enable = 0
+    </select>
+
+    <update id="disableOpenId" parameterType="map">
+        update argus.t_argus_wxinfo_temp
+        set enable = #{enable}
+        where open_id = #{openId}
+    </update>
+
+    <select id="getWXInfo" parameterType="map" resultMap="WXResultMap">
+        select
+        <include refid="Wx_Column_List"/>
+        from argus.t_argus_wxinfo_temp
+        where open_id = #{openId}
+        <if test="enable != null">
+            and enable = #{enable}
+        </if>
+        limit 1
+    </select>
+
+    <delete id="deleteUser" parameterType="java.lang.String">
+        delete from t_argus_user
+        where id = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <select id="getUserInfoByOpenId" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from argus.t_argus_user
+        where open_id = #{openId}
+        limit 1
+    </select>
+
+    <select id="getUserInfoByEmail" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from argus.t_argus_user
+        where email = #{email}
+        limit 1
+    </select>
+
+</mapper>

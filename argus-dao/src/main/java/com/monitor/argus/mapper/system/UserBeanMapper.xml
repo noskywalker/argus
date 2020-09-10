@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="userBeanMapper">
+    <resultMap id="BaseResultMap" type="com.monitor.argus.bean.system.UserBean">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="USER_NAME" property="userName" jdbcType="VARCHAR"/>
+        <result column="PASSWORD" property="password" jdbcType="VARCHAR"/>
+        <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+        <result column="EMAIL" property="email" jdbcType="VARCHAR"/>
+        <result column="LAST_LOGIN_TIME" property="lastLoginTime" jdbcType="TIMESTAMP"/>
+        <result column="OPERATOR_ID" property="operatorId" jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="DATE"/>
+        <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="enable" property="enable" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="UserAuthResultMap" type="com.monitor.argus.bean.system.UserAuthBean">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="auth_id" property="authId" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ID, USER_NAME, PASSWORD, PHONE, EMAIL, LAST_LOGIN_TIME,
+        OPERATOR_ID, CREATE_TIME, UPDATE_TIME, enable
+    </sql>
+    <sql id="getColumn">
+        u.ID as id,
+        u.USER_NAME as userName,
+        u.PHONE as phone,
+        u.EMAIL as email,
+        u.LAST_LOGIN_TIME as lastLoginTime,
+        u.OPERATOR_ID as operatorId,
+        u.CREATE_TIME as createTime,
+        u.UPDATE_TIME as updateTime,
+        u.enable as enable
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from argus.t_argus_system_user
+        where ID = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insertSelective" parameterType="map">
+        insert into argus.t_argus_system_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userName != null and userName.length() > 0">
+                user_name,
+            </if>
+            <if test="password != null and password.length() > 0">
+                password,
+            </if>
+            <if test="phone != null and phone.length() > 0">
+                phone,
+            </if>
+            <if test="email != null and email.length() > 0">
+                email,
+            </if>
+            <if test="operatorId != null and operatorId > 0">
+                operator_id,
+            </if>
+            create_time
+        </trim>
+        <trim prefix=" values(" suffix=")" suffixOverrides=",">
+            <if test="userName != null and userName.length() > 0">
+                #{userName},
+            </if>
+            <if test="password != null and password.length() > 0">
+                #{password},
+            </if>
+            <if test="phone != null and phone.length() > 0">
+                #{phone},
+            </if>
+            <if test="email != null and email.length() > 0">
+                #{email},
+            </if>
+            <if test="operatorId != null and operatorId > 0">
+                #{operatorId},
+            </if>
+            now()
+        </trim>
+    </insert>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="map">
+        update argus.t_argus_system_user
+        <set>
+            <if test="userName != null and userName.length() > 0">
+                USER_NAME = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null and password.length() > 0">
+                PASSWORD = #{password,jdbcType=VARCHAR},
+            </if>
+
+            <if test="phone != null and phone.length() > 0">
+                PHONE = #{phone,jdbcType=VARCHAR},
+            </if>
+
+            <if test="operatorId != null and operatorId>0">
+                OPERATOR_ID = #{operatorId,jdbcType=VARCHAR},
+            </if>
+
+            <if test="enable != null and enable >= 0">
+                enable = #{enable,jdbcType=INTEGER},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+
+
+    <sql id="getCondition">
+        <if test="id != null and id != '' ">u.ID = #{id,jdbcType=VARCHAR}</if>
+        <if test="userName != null and userName != '' ">and u.USER_NAME like CONCAT
+            ('%',#{userName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="password != null and password != '' ">and u.PASSWORD = #{password,jdbcType=VARCHAR}</if>
+        <if test="phone != null and phone != '' ">and u.PHONE =#{phone,jdbcType=VARCHAR}</if>
+        <if test="email != null and email != '' ">and u.EMAIL =#{email,jdbcType=VARCHAR}</if>
+        <if test="operatorId != null and operatorId >0">and u.OPERATOR_ID = #{operatorId,jdbcType=VARCHAR}</if>
+        <if test="enable != null and enable >=0">and u.enable = #{enable}</if>
+    </sql>
+
+    <!-- 查询列表 -->
+    <select id="getUserBean" resultMap="BaseResultMap"
+            parameterType="map">
+        select
+        <include refid="getColumn"/>
+        from argus.t_argus_system_user u
+        <where>
+            <include refid="getCondition"/>
+        </where>
+        order by update_time desc
+    </select>
+
+    <!-- 查询列表 -->
+    <select id="getUserBeanList" resultMap="BaseResultMap"
+            parameterType="map">
+        select
+        <include refid="getColumn"/>
+        from argus.t_argus_system_user u
+        <where>
+            <include refid="getCondition"/>
+        </where>
+        order by update_time desc
+        <if test="rows!=null and rows != 0">
+            limit #{pageStart},#{rows}
+        </if>
+    </select>
+
+    <!-- 查询列表记录数 -->
+    <select id="getUserBeanListCount" resultType="INT"
+            parameterType="map">
+        select count(0) from argus.t_argus_system_user u
+        <where>
+            <include refid="getCondition"/>
+        </where>
+    </select>
+
+    <select id="getAuthListByUserId" parameterType="map" resultType="INT">
+        select auth_id
+        from argus.t_argus_system_user_auth
+        where user_id = #{userId}
+    </select>
+
+    <insert id="insertUserAuth" parameterType="map">
+        INSERT into argus.t_argus_system_user_auth
+        (user_id,auth_id)
+        VALUES
+        <foreach collection="list" separator="," index="index" item="item">
+            (#{userId},#{item})
+        </foreach>
+    </insert>
+
+    <delete id="deleteUserAuth" parameterType="map">
+        delete from argus.t_argus_system_user_auth
+        where user_id = #{userId}
+    </delete>
+
+
+</mapper>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration debug="false" scan="true" scanPeriod="5 minutes">
+	<contextName>argus-monitor</contextName>
+
+	<property name="LOG_HOME" value="${catalina.home}/logs/" />
+
+
+	<!-- 控制台输出 -->
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} | %-5level | %c\(%line\) | %msg%n</pattern>
+		</layout>
+	</appender>
+
+	<appender name="alarmSystem" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/argus-alarm.log</file>
+		<appender>true</appender>
+		<Encoding>UTF-8</Encoding>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/argus-alarm.%d{yyyy-MM-dd}.log.gz
+			</fileNamePattern>
+			<maxHistory>7</maxHistory>
+		</rollingPolicy>
+
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} | %-5level | %c\(%line\) | %msg%n</pattern>
+		</encoder>
+	</appender>
+	<appender name="monitorOther" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/argus-alarm-other.log</file>
+		<appender>true</appender>
+		<Encoding>UTF-8</Encoding>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/argus-alarm.%d{yyyy-MM-dd}.log.gz
+			</fileNamePattern>
+			<maxHistory>7</maxHistory>
+		</rollingPolicy>
+
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} | %-5level | %c\(%line\) | %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="org.apache.zookeeper" level="INFO" />
+	<logger name="o.a.z.client.ZooKeeperSaslClient" level="INFO" />
+
+	<logger name="com.monitor.argus.alarm" level="DEBUG" additivity="false">
+		<appender-ref ref="alarmSystem"/>
+		<appender-ref ref="stdout"/>
+
+	</logger>
+
+	<root level="INFO">
+		<appender-ref ref="stdout" />
+		<appender-ref ref="monitorOther" />
+	</root>
+
+</configuration>

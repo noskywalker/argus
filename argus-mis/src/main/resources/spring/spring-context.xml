@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-4.2.xsd
+http://www.springframework.org/schema/task
+http://www.springframework.org/schema/task/spring-task-4.2.xsd
+">
+
+
+
+    <context:component-scan base-package="com.monitor.argus">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+    <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
+
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <!-- 线程池活跃的线程数 -->
+        <property name="corePoolSize" value="5"/>
+        <!-- 线程池最大活跃的线程数 -->
+        <property name="maxPoolSize" value="10"/>
+        <!-- 队列的最大容量 -->
+        <property name="queueCapacity" value="3000"/>
+    </bean>
+    <bean id="springContextUtil" class="com.monitor.argus.common.util.SpringContextUtil" lazy-init="false"/>
+
+    <import resource="classpath*:spring/spring-dataSource.xml"/>
+    <import resource="classpath*:spring/spring-log.xml"/>
+    <import resource="classpath*:spring/spring-service.xml"/>
+    <import resource="classpath*:spring/spring-mongodb.xml"/>
+</beans>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorator="layout/sysflowFullLayout">
+<head>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <!-- Navigation -->
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">系统地区流量</h1>
+            </div>
+        </div>
+
+        <div class="row" style="font-size:16px;">
+            <div class="col-md-2">所属系统：</div>
+            <div class="col-md-3">
+                <select id="systemId" th:if="!${#lists.isEmpty(systemList)}"
+                        style="height:29px;border-radius:3px;border:1px solid #DDDDDD;">
+                    <option th:each="system : ${systemList}"
+                            th:value="${system.id}"
+                            th:text="${system.systemName}"
+                            th:selected="${systemId eq system.id}"
+                    >
+                    </option>
+                </select>
+            </div>
+            <input type="hidden" th:value="${hanId}" id="hanIdV" />
+            <div class="col-md-1">
+                <button class="btn btn-primary"
+                        onclick="javascript:window.location.href='/statisticsmonitor/systemcityflow?systemId='+document.getElementById('systemId').value+'&amp;hanId='+document.getElementById('hanIdV').value">
+                    查&nbsp;&nbsp;询
+                </button>
+
+
+            </div>
+            <div class="col-md-1">
+            <button class="btn btn-primary"
+                    onclick="javascript:window.location.href='/statisticsmonitor/systemcityflowClear?systemId='+document.getElementById('systemId').value+'&amp;hanId='+document.getElementById('hanIdV').value">
+                清&nbsp;&nbsp;理
+            </button>
+                </div>
+        </div>
+        <br/>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-area-chart fa-fw"></i>系统流量列表
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>城市名称</th>
+                                <th>流量</th>
+                                <th>占比</th>
+                            </tr>
+                            </thead>
+                            <tbody id="flowTbody">
+                            <tr th:each="result : ${flowList}">
+                                <td th:text="${result.num}">id</td>
+                                <td th:text="${result.cityName}">城市名称</td>
+                                <td th:text="${result.ipFlow}">流量</td>
+                                <td th:text="${result.percent}">占比</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.panel-body -->
+    </div>
+
+</div>
+
+</body>
+</html>

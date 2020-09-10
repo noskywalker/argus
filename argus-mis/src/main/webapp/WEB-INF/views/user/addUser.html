@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorator="layout/userFullPageLayout">
+<body>
+<div layout:fragment="content">
+    <div id="dialog" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog"
+         aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="addMonitorDialog">通知</h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button id="diaglogOK" class="btn btn-primary" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header" th:if="${addUserForm.id == null}">添加用户</h1>
+                <h1 class="page-header" th:if="${addUserForm.id != null}">修改用户</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container">
+                <form role="form" action="#" th:action="@{/user/add}" method="post" th:object="${addUserForm}"
+                      id="addUserForm">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-md-12">
+                                <div class="container-fluid">
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-md-6 form-group">
+                                                <input type="hidden" th:field="*{id}" id="hid"/>
+                                                <label class="control-label">用户名</label>
+                                                <input maxlength="200" type="text" required="required"
+                                                       class="form-control" th:field="*{userName}"
+                                                       placeholder="用户名"/>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label class="control-label">电话</label>
+                                                <input maxlength="200" type="text" required="required"
+                                                       class="form-control" th:field="*{telephone}"
+                                                       placeholder="电话"/>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 form-group">
+                                                <label class="control-label">手机号</label>
+                                                <input maxlength="200" type="text" required="required"
+                                                       class="form-control" th:field="*{cellphone}"
+                                                       placeholder="手机号"/>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label class="control-label">邮箱</label>
+                                                <input maxlength="200" type="text" required="required"
+                                                       class="form-control" th:field="*{email}"
+                                                       placeholder="邮箱"/>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 form-group">
+                                                <label class="control-label">微信</label>
+                                                <select class="form-control selectpicker" multiple="multiple"
+                                                        th:field="*{openId}" id="openIdList">
+                                                    <option th:each="open : ${openIdList}"
+                                                            th:value="${open.openId}"
+                                                            th:text="${open.nickName}">
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label class="control-label">QQ</label>
+                                                <input maxlength="200" type="text" required="required"
+                                                       class="form-control" th:field="*{qq}"
+                                                       placeholder="QQ"/>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 form-group">
+                                                <label class="control-label">部门</label>
+                                                <input maxlength="200" type="text" required="required"
+                                                       class="form-control" th:field="*{department}"
+                                                       placeholder="部门"/>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label class="control-label">组名</label>
+                                                <select class="form-control selectpicker" multiple="multiple"
+                                                        th:field="*{groupIds}" id="groupList" required="required">
+                                                    <option th:each="group : ${groupList}"
+                                                            th:value="${group.id}"
+                                                            th:text="${group.groupName}">aa
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <button class="btn btn-primary nextBtn btn-lg pull-right" type="submit"
+                                            value="完成" id="saveBtn" th:if="${addUserForm.id == null}">添加
+                                    </button>
+                                    <button class="btn btn-primary nextBtn btn-lg pull-right" type="submit"
+                                            value="完成" id="saveBtn" th:if="${addUserForm.id != null}">修改
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

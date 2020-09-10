@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="analyTopologyDatalandHourMapper">
+    <resultMap id="BaseResultMap" type="com.monitor.argus.bean.dataland.AnalyTopologyDatalandEntity">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="LOG_COUNT" property="logCount" jdbcType="VARCHAR"/>
+        <result column="DIFF_LOG_COUNT" property="diffLogCount" jdbcType="VARCHAR"/>
+        <result column="NODE_KEY" property="nodeKey" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, LOG_COUNT, DIFF_LOG_COUNT, NODE_KEY, CREATE_DATE
+    </sql>
+
+    <select id="selectAllAnalyTopologyData" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_topo_analy_hour_data order by CREATE_DATE DESC
+    </select>
+
+    <insert id="insert" parameterType="com.monitor.argus.bean.dataland.AnalyTopologyDatalandEntity">
+        replace into t_topo_analy_hour_data (ID, LOG_COUNT, DIFF_LOG_COUNT, NODE_KEY, CREATE_DATE)
+        values (#{id,jdbcType=VARCHAR}, #{logCount,jdbcType=VARCHAR}, #{diffLogCount,jdbcType=VARCHAR}, #{nodeKey,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <select id="getDataByDate" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_topo_analy_hour_data
+        <where>
+            <if test="beginDate != null and beginDate.length() > 0">
+                create_date > #{beginDate}
+            </if>
+            <if test="endDate != null and endDate.length() > 0">
+                and create_date &lt; #{endDate}
+            </if>
+            <if test="nodeKey != null and nodeKey.length() > 0">
+                and NODE_KEY = #{nodeKey}
+            </if>
+        </where>
+        order by CREATE_DATE
+    </select>
+
+    <delete id="delByDate" parameterType="map">
+        delete from t_topo_analy_hour_data
+        <where>
+            <if test="endDate != null and endDate.length() > 0">
+                create_date &lt;= #{endDate}
+            </if>
+        </where>
+    </delete>
+
+</mapper>

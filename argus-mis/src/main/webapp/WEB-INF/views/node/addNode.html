@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorator="layout/nodeFullPageLayout">
+<body>
+<div layout:fragment="content">
+    <div id="dialog" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog"
+         aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="addMonitorDialog">通知</h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button id="diaglogOK" class="btn btn-primary" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header" th:if="${addNodeForm.id == null}">添加监控节点</h1>
+                <h1 class="page-header" th:if="${addNodeForm.id != null}">编辑监控节点</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container">
+                <form role="form" id="addNodeForm" action="#" th:action="@{/node/add}" method="post"
+                      th:object="${addNodeForm}">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-md-12">
+                                <div class="container-fluid">
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-md-4 form-group">
+                                                <input type="hidden" th:field="*{id}" id="hid"/>
+                                                <input type="hidden" th:field="*{nodeKey}" id="hkey"/>
+                                                <label class="control-label">节点名称:</label>
+                                                <input maxlength="100" type="text" required="required"
+                                                       class="form-control" th:field="*{nodeName}"
+                                                       placeholder="节点名称" id="nodeName"/>
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <label class="control-label">所属监控系统:</label>
+                                                <select class="form-control selectpicker"
+                                                        th:field="*{nodeSystemId}" id="systemList">
+                                                    <option th:each="system : ${systemList}"
+                                                            th:value="${system.id}"
+                                                            th:text="${system.systemName}">
+                                                    </option>
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 form-group">
+                                                <label class="control-label">节点URL:</label>
+                                                <input maxlength="100" type="text" required="required"
+                                                       class="form-control" th:field="*{nodeUrl}"
+                                                       placeholder="节点URL" id="nodeUrl"/>
+                                            </div>
+                                            <div class="col-md-4 form-group">
+                                                <input type="hidden" th:field="*{enableHidden}" id="henable"/>
+                                                <label class="control-label">节点状态</label>
+                                                <div class="switch switch-small">
+                                                    <input type="checkbox" name="enable-checkbox" checked="checked"/>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 form-group">
+                                                <label class="control-label">是否采集UV</label>
+                                                <div class="form-inline">
+                                                    <select class="form-control"
+                                                            th:field="*{isUv}"
+                                                            required="required">
+                                                        <option value="0">否</option>
+                                                        <option value="1">是</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4 form-group">
+                                                <label class="control-label">是否接口计算</label>
+                                                <div class="form-inline">
+                                                    <select class="form-control"
+                                                            th:field="*{isInterface}"
+                                                            required="required">
+                                                        <option value="0">否</option>
+                                                        <option value="1">是</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+                                    <button class="btn btn-primary nextBtn btn-lg pull-left" type="submit"
+                                            value="完成" id="saveBtn" th:if="${addNodeForm.id== null}">添加
+                                    </button>
+                                    <button class="btn btn-primary nextBtn btn-lg pull-left" type="submit"
+                                            value="完成" id="saveBtn" th:if="${addNodeForm.id != null}">修改
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorator="layout/monitorFullPageLayoutNew">
+<body>
+<div layout:fragment="content">
+    <div id="dialog" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog"
+         aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="addMonitorDialog">通知</h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button id="diaglogOK" class="btn btn-primary" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-10">
+                <h1 class="page-header" th:if="${addMonitorForm.monitorHostFormList == null}">添加监控系统</h1>
+                <h1 class="page-header" th:if="${addMonitorForm.monitorHostFormList != null}">修改监控系统</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container">
+                <form role="form" action="#" th:action="@{/monitor/addnew}" method="post" th:object="${addMonitorForm}"
+                      id="addMonitorForm">
+                    <div class="col-xs-10">
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <label class="control-label">系统名称</label>
+                                <input maxlength="100" type="text" required="required" class="form-control"
+                                       th:field="*{systemName}" placeholder="系统名称"/>
+                                <input type="hidden" th:field="*{id}" id="hid"/>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">是否采集地区数据</label>
+                                <select class="form-control"
+                                        th:field="*{isIp}" required="required">
+                                    <option value="0">否</option>
+                                    <option value="1">是</option>
+                                </select>
+                            </div>
+                            <div class="control-group" id="fields">
+                                <label class="control-label" for="field1">Host</label>
+                                <div class="controls">
+
+                                    <div class="entry input-group col-xs-10" th:if="*{monitorHostFormList != null}"
+                                         th:each="monitorHost,rowStat:*{monitorHostFormList}"
+                                         th:with="ssize=*{#lists.size(monitorHostFormList)}">
+                                        <div class="row">
+                                            <input type="hidden"
+                                                   th:field="*{monitorHostFormList[__${rowStat.index}__].id}"/>
+                                            <div class="col-xs-2">
+                                                <input class="form-control" name="fields[0]" type="text"
+                                                       required="required"
+                                                       placeholder="主机名"
+                                                       th:field="*{monitorHostFormList[__${rowStat.index}__].hostName}"/>
+                                            </div>
+                                            <div class="col-xs-2">
+                                                <input class="form-control" name="fields[1]" type="text"
+                                                       required="required"
+                                                       placeholder="IP"
+                                                       th:field="*{monitorHostFormList[__${rowStat.index}__].ip}"/>
+                                            </div>
+                                            <div class="col-xs-2">
+                                                <input class="form-control" name="fields[2]" type="text"
+                                                       required="required"
+                                                       placeholder="系统"
+                                                       th:field="*{monitorHostFormList[__${rowStat.index}__].os}"/>
+                                            </div>
+                                            <div class="col-xs-5 input-group">
+                                                <input class="form-control" name="fields[3]" type="text"
+                                                       placeholder="备注"
+                                                       th:field="*{monitorHostFormList[__${rowStat.index}__].detail}"/>
+                                                    <span class="input-group-btn">
+                                                            <button class="btn btn-success btn-add" type="button"
+                                                                    th:if="${rowStat.index == (ssize-1)}">
+                                                                <span class="glyphicon glyphicon-plus"></span>
+                                                            </button>
+
+                                                            <button class="btn btn-danger btn-remove" type="button"
+                                                                    th:if="${rowStat.index != (ssize-1)}">
+                                                                <span class="glyphicon glyphicon-minus"></span>
+                                                            </button>
+                                                        </span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="entry input-group col-xs-10" th:if="*{monitorHostFormList == null}">
+                                        <div class="row">
+                                            <div class="col-xs-2">
+                                                <input class="form-control" name="fields[0]" type="text"
+                                                       required="required"
+                                                       placeholder="主机名"
+                                                       th:field="*{monitorHostFormList[0].hostName}"/>
+                                            </div>
+                                            <div class="col-xs-2">
+                                                <input class="form-control" name="fields[1]" type="text"
+                                                       required="required"
+                                                       placeholder="IP"
+                                                       th:field="*{monitorHostFormList[0].ip}"/>
+                                            </div>
+                                            <div class="col-xs-2">
+                                                <input class="form-control" name="fields[2]" type="text"
+                                                       required="required"
+                                                       placeholder="系统"
+                                                       th:field="*{monitorHostFormList[0].os}"/>
+                                            </div>
+                                            <div class="col-xs-5 input-group">
+                                                <input class="form-control" name="fields[3]" type="text"
+                                                       placeholder="备注"
+                                                       th:field="*{monitorHostFormList[0].detail}"/>
+                                                    <span class="input-group-btn">
+                                                            <button class="btn btn-success btn-add" type="button">
+                                                                <span class="glyphicon glyphicon-plus"></span>
+                                                            </button>
+                                                        </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <br/>
+                            <div class="form-group">
+                                <label class="control-label">备注</label>
+                                <input maxlength="100" type="text" class="form-control"
+                                       placeholder="备注" th:field="*{detail}"/>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="submit" value="保存" class="btn btn-primary"  />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+
+</div>
+</body>
+</html>

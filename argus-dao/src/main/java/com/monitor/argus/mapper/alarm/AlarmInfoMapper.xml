@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="alertInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.monitor.argus.bean.alarm.AlarmInfoEntity" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="MONITOR_ID" property="monitorId" jdbcType="VARCHAR" />
+    <result column="ALARM_ID" property="alarmId" jdbcType="VARCHAR" />
+    <result column="TRIGGER_TIME" property="triggerTime" jdbcType="TIMESTAMP" />
+    <result column="TRIGGER_COUNT" property="triggerCount" jdbcType="INTEGER" />
+    <result column="ALARM_TYPE" property="alarmType" jdbcType="INTEGER"/>
+    <result column="ALARM_DETAIL" property="alarmDetail" jdbcType="VARCHAR"/>
+    <result column="SYSTEM_NAME" property="systemName" jdbcType="VARCHAR"/>
+    <result column="IP" property="ip" jdbcType="VARCHAR"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, MONITOR_ID, ALARM_ID, TRIGGER_TIME, TRIGGER_COUNT, ALARM_TYPE, ALARM_DETAIL, SYSTEM_NAME, IP
+  </sql>
+  <select id="selectAllAlarmInfo" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_argus_alarms
+  </select>
+
+  <insert id="insert" parameterType="com.monitor.argus.bean.alarm.AlarmInfoEntity" >
+    insert into t_argus_alarms (ID, MONITOR_ID, ALARM_ID, TRIGGER_TIME, TRIGGER_COUNT, ALARM_TYPE, ALARM_DETAIL, SYSTEM_NAME, IP)
+    values (#{id,jdbcType=VARCHAR}, #{monitorId,jdbcType=VARCHAR},
+    #{alarmId,jdbcType=VARCHAR}, #{triggerTime,jdbcType=TIMESTAMP}, #{triggerCount,jdbcType=INTEGER}, #{alarmType,jdbcType=INTEGER} ,
+     #{alarmDetail,jdbcType=VARCHAR} ,#{systemName,jdbcType=VARCHAR} , #{ip,jdbcType=VARCHAR}
+    )
+  </insert>
+
+  <select id="selectPageCount"
+          resultType="java.lang.Long">
+    SELECT
+    count(1)
+    FROM t_argus_alarms
+  </select>
+
+  <select id="selectPageList" parameterType="com.monitor.argus.common.model.PageHelper"
+          resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM t_argus_alarms order by trigger_time desc
+    limit #{pageStart},#{rows}
+  </select>
+
+</mapper>

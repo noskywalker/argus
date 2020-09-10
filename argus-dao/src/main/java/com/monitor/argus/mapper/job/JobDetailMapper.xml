@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="jobDetailMapper" >
+    <resultMap id="BaseResultMap" type="com.monitor.argus.bean.job.JobDetailEntity" >
+        <id column="ID" property="id" jdbcType="VARCHAR" />
+        <result column="JOB_NAME" property="jobName" jdbcType="VARCHAR" />
+        <result column="CRON_EXP" property="cronExp" jdbcType="VARCHAR" />
+        <result column="LAST_EXEC_TIME" property="lastExecTime" jdbcType="TIMESTAMP" />
+        <result column="NEXT_EXEC_TIME" property="nextExecTime" jdbcType="TIMESTAMP" />
+        <result column="SUCCESS" property="success" jdbcType="BOOLEAN" />
+        <result column="VALID" property="valid" jdbcType="BOOLEAN" />
+        <result column="JOB_CLASS" property="jobClass" jdbcType="VARCHAR" />
+        <result column="METHOD_NAME" property="methodName" jdbcType="VARCHAR" />
+        <result column="OPERATOR" property="operator" jdbcType="VARCHAR" />
+        <result column="MONITOR_ID" property="monitorId" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+         ID,JOB_NAME,CRON_EXP,LAST_EXEC_TIME,NEXT_EXEC_TIME,SUCCESS,VALID,JOB_CLASS,METHOD_NAME,OPERATOR,MONITOR_ID
+    </sql>
+
+    <insert id="insert" parameterType="com.monitor.argus.bean.job.JobDetailEntity" >
+        replace into t_argus_job (ID,JOB_NAME,CRON_EXP,LAST_EXEC_TIME,NEXT_EXEC_TIME,SUCCESS,VALID,JOB_CLASS,METHOD_NAME,OPERATOR)
+        values (#{id,jdbcType=VARCHAR},#{jobName,jdbcType=VARCHAR}, #{cronExp,jdbcType=VARCHAR},
+        #{lastExecTime,jdbcType=TIMESTAMP}, #{nextExecTime,jdbcType=TIMESTAMP},
+        #{success,jdbcType=BOOLEAN}, #{valid,jdbcType=BOOLEAN},
+        #{jobClass,jdbcType=VARCHAR}, #{methodName,jdbcType=VARCHAR},#{operator,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <select id="findJobByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from t_argus_job
+        where JOB_NAME = #{jobName,jdbcType=VARCHAR}
+    </select>
+
+
+    <update id="updateJob" parameterType="com.monitor.argus.bean.job.JobDetailEntity">
+        update t_argus_job
+        <set>
+            <if test="jobName != null">
+                JOB_NAME = #{jobName,jdbcType=VARCHAR},
+            </if>
+            <if test="cronExp != null">
+                CRON_EXP = #{cronExp,jdbcType=VARCHAR},
+            </if>
+            <if test="lastExecTime != null">
+                LAST_EXEC_TIME = #{lastExecTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="nextExecTime != null">
+                NEXT_EXEC_TIME = #{nextExecTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="success != null">
+                SUCCESS = #{success,jdbcType=BOOLEAN},
+            </if>
+            <if test="valid != null">
+                VALID = #{valid,jdbcType=BOOLEAN},
+            </if>
+            <if test="jobClass != null">
+                JOB_CLASS = #{jobClass,jdbcType=VARCHAR},
+            </if>
+            <if test="methodName != null">
+                METHOD_NAME = #{methodName,jdbcType=VARCHAR},
+            </if>
+            <if test="operator != null">
+                OPERATOR = #{operator,jdbcType=VARCHAR},
+            </if>
+            <if test="monitorId != null">
+                MONITOR_ID = #{monitorId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <select id="getAllJob" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_argus_job
+    </select>
+
+
+    <select id="findJobById" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from t_argus_job
+        where ID = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <update id="cancelMonitor" parameterType="java.lang.String">
+        update t_argus_job set MONITOR_ID = NULL where ID = #{id,jdbcType=VARCHAR}
+    </update>
+
+</mapper>

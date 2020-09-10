@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="groupUserMapper" >
+  <resultMap id="BaseResultMap" type="com.monitor.argus.bean.groupuser.GroupUserEntity" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="GROUP_ID" property="groupId" jdbcType="VARCHAR" />
+    <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    <result column="ALARM_TYPE" property="alarmType" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, GROUP_ID, USER_ID, ALARM_TYPE
+  </sql>
+  <insert id="insert" parameterType="com.monitor.argus.bean.groupuser.GroupUserEntity">
+    insert into t_alarm_group_user (ID, GROUP_ID, USER_ID, ALARM_TYPE)
+    values (#{id,jdbcType=VARCHAR}, #{groupId,jdbcType=VARCHAR},
+    #{userId,jdbcType=VARCHAR}, #{alarmType,jdbcType=INTEGER})
+  </insert>
+  <select id="getGroupsByUserId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List"/>
+    from t_alarm_group_user
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteGroupUser" parameterType="java.lang.String">
+    delete from t_alarm_group_user
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </delete>
+
+</mapper>

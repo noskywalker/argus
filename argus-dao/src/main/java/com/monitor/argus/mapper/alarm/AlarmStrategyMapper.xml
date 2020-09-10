@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="alertStrategyMapper">
+    <resultMap id="BaseResultMap" type="com.monitor.argus.bean.alarm.AlarmStrategyEntity">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="ALARM_NAME" property="alarmName" jdbcType="VARCHAR"/>
+        <result column="ALARM_STRATEGY" property="alarmStrategy" jdbcType="VARCHAR"/>
+        <result column="ALARM_TYPE" property="alarmType" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, ALARM_NAME, ALARM_STRATEGY, ALARM_TYPE, CREATE_DATE
+  </sql>
+    <select id="selectAllAlarmStrategy" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_alarm_strategy
+    </select>
+
+    <select id="selectAlarmStrategyByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from t_alarm_strategy
+        where ID = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insert" parameterType="com.monitor.argus.bean.alarm.AlarmStrategyEntity">
+    insert into t_alarm_strategy (ID, ALARM_NAME, ALARM_STRATEGY, ALARM_TYPE, CREATE_DATE
+    )
+    values (#{id,jdbcType=VARCHAR}, #{alarmName,jdbcType=VARCHAR},
+      #{alarmStrategy,jdbcType=VARCHAR}, #{alarmType,jdbcType=VARCHAR}, now()
+      )
+  </insert>
+
+    <select id="selectAlarmOfAlarmGroup" resultType="java.util.HashMap" parameterType="java.lang.String">
+    select DISTINCT u.`cell_phone`,u.`weixin`,u.`email`,u.`open_id` from `t_argus_user` u,t_alarm_group_user gu,t_alarm_group g where gu.`user_id`=u.`id` and gu.`group_id`=g.`id` and g.enable=1 and g.alarm_id=#{alarmId,jdbcType=VARCHAR}
+  </select>
+
+    <select id="selectAlarmStrategy" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from t_alarm_strategy
+        <where>
+            <if test="alarmName != null and alarmName.length() > 0">
+                alarm_name = #{alarmName}
+            </if>
+            <if test="alarmType != null and alarmType >0">
+                and alarm_type = #{alarmType}
+            </if>
+        </where>
+        <if test="pageStart != null and pageStart >0 and rows != null and rows > 0">
+            limit #{pageStart},#{rows}
+        </if>
+    </select>
+
+    <update id="updateAlarmStrategy" parameterType="map">
+        update t_alarm_strategy
+        <set>
+            <if test="alarmName != null and alarmName.length() > 0">
+                alarm_name = #{alarmName},
+            </if>
+            <if test="alarmType != null and alarmType > 0">
+                alarm_type = #{alarmType},
+            </if>
+            <if test="alarmStrategy != null and alarmStrategy.length() >0">
+                alarm_strategy = #{alarmStrategy},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAlarmStrategy" parameterType="map">
+        delete from t_alarm_strategy where id = #{id}
+    </delete>
+
+</mapper>

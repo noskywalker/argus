@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorator="layout/fullAddressLayout">
+
+<body>
+<div layout:fragment="content">
+    <!-- Navigation -->
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-24">
+                <h1 class="page-header">地区热点分布</h1>
+
+                <div class="row" style="font-size:16px;">
+                    <div class="col-md-2">所属系统：</div>
+                    <div class="col-md-3">
+                        <select id="systemId" th:if="!${#lists.isEmpty(systemList)}"
+                                style="height:29px;border-radius:3px;border:1px solid #DDDDDD;">
+                            <option th:each="system : ${systemList}"
+                                    th:value="${system.id}"
+                                    th:text="${system.systemName}"
+                                    th:selected="${systemDefaultId eq system.id}"
+                            >
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <input type="hidden" th:value="${hanId}" id="hanIdV" />
+                        <button class="btn btn-primary" onclick="onQueryClickQueryAddress();">查&nbsp;&nbsp;询
+                        </button>
+                    </div>
+                </div>
+                <br/>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-line-chart fa-fw"></i>用户地区热点分布
+                    </div>
+                    <div class="panel-body">
+                        <div style="height:900px;">
+                            <div class="flot-chart-content" id="demo-map"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

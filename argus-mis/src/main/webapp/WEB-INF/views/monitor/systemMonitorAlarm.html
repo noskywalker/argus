@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorator="layout/sysflowFullLayout">
+<head>
+    <script type="text/javascript">
+
+    </script>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <!-- Navigation -->
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">系统监控报警总排行</h1>
+            </div>
+        </div>
+
+        <div class="row ">
+            <div class="col-xs-5">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-area-chart fa-fw"></i>监控次数排行
+                    </div>
+                    <!-- /.panel-heading -->
+
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <table class="table table-hover table-bordered" id="dataTables-monitor">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>系统名称</th>
+                                <th>监控次数</th>
+                                <th>占比</th>
+                            </tr>
+                            </thead>
+                            <tbody id="monitorTbody">
+                            <tr th:each="result : ${monitorList}">
+                                <td th:text="${result.num}">id</td>
+                                <td th:text="${result.systemName}">系统名称</td>
+                                <td th:text="${result.count}">监控次数</td>
+                                <td th:text="${result.percent}">占比</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- /.panel -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+
+
+            <div class="col-xs-5">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-area-chart fa-fw"></i>报警次数排行
+                    </div>
+
+                    <div class="panel-body">
+                        <table class="table table-hover table-bordered" id="dataTables-alarm">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>系统名称</th>
+                                <th>报警次数</th>
+                                <th>占比</th>
+                            </tr>
+                            </thead>
+                            <tbody id="alarmTbody">
+                            <tr th:each="result : ${alarmList}">
+                                <td th:text="${result.num}">id</td>
+                                <td th:text="${result.systemName}">系统名称</td>
+                                <td th:text="${result.count}">监控次数</td>
+                                <td th:text="${result.percent}">占比</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorator="layout/rtfFullPageLayout">
+<head>
+    <script type="text/javascript">
+
+    </script>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <!-- Navigation -->
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">节点实时流量</h1>
+            </div>
+        </div>
+
+        <div class="row" style="font-size:16px;">
+            <div class="col-md-2">所属节点：</div>
+            <div class="col-md-3">
+                <select id="nodeKey" th:if="!${#lists.isEmpty(nodelist)}"
+                        style="height:29px;border-radius:3px;border:1px solid #DDDDDD;">
+                    <option th:each="node : ${nodelist}"
+                            th:value="${node.nodeKey}"
+                            th:text="${node.nodeName}"
+                            th:selected="${nodeKey eq node.nodeKey}"
+                    >
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <input type="hidden" th:value="${hanId}" id="hanIdV" />
+                <button class="btn btn-primary" id="ClickA">查&nbsp;&nbsp;询
+                </button>
+            </div>
+        </div>
+        <br/>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-area-chart fa-fw"></i>节点PV(PV/S)
+                        <input hidden="hidden" id="maxNum" th:value="${max}"/>
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="flot-chart">
+                            <div class="flot-chart-content" id="flot-line-chart-moving"></div>
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

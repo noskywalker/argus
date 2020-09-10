@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ipConfigMapper">
+    <resultMap id="BaseResultMap" type="com.monitor.argus.bean.ipaddress.IpConfigEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="ip_start" property="ipStart" jdbcType="VARCHAR"/>
+        <result column="ip_end" property="ipEnd" jdbcType="VARCHAR"/>
+        <result column="ip_start_num" property="ipStartNum" jdbcType="INTEGER"/>
+        <result column="ip_end_num" property="ipEndNum" jdbcType="INTEGER"/>
+        <result column="address_detail" property="addressDetail" jdbcType="VARCHAR"/>
+        <result column="address_short" property="addressShort" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="ShortResultMap" type="com.monitor.argus.bean.ipaddress.IpConfigEntity">
+        <result column="ip_start_num" property="ipStartNum" jdbcType="INTEGER"/>
+        <result column="ip_end_num" property="ipEndNum" jdbcType="INTEGER"/>
+        <result column="address_short" property="addressShort" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="All_Column_List">
+        id,ip_start,ip_end,ip_start_num,ip_end_num,address_detail,address_short,create_time
+    </sql>
+    <sql id="Short_Column_List">
+        ip_start_num,ip_end_num,address_short
+    </sql>
+
+    <insert id="insert" parameterType="com.monitor.argus.bean.ipaddress.IpConfigEntity">
+        insert into t_ip_address (id,ip_start,ip_end,ip_start_num,ip_end_num,address_detail,address_short,create_time)
+        values (#{id,jdbcType=INTEGER}, #{ipStart,jdbcType=VARCHAR},#{ipEnd,jdbcType=VARCHAR},
+        #{ipStartNum,jdbcType=INTEGER}, #{ipEndNum,jdbcType=INTEGER}, #{addressDetail, jdbcType=VARCHAR},
+        #{addressShort, jdbcType=VARCHAR}, now())
+    </insert>
+
+    <select id="getAllIpConfigList" resultMap="BaseResultMap">
+        select
+        <include refid="All_Column_List"/>
+        from t_ip_address
+    </select>
+
+    <select id="getShortIpConfigList" resultMap="ShortResultMap">
+        select
+        <include refid="Short_Column_List"/>
+        from t_ip_address
+    </select>
+
+    <select id="getShortAddress" resultType="String">
+        SELECT distinct(address_short) FROM argus.t_ip_address;
+    </select>
+</mapper>

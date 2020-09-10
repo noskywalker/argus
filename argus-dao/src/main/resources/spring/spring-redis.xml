@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.2.xsd
+http://www.springframework.org/schema/task
+http://www.springframework.org/schema/task/spring-task-3.2.xsd
+">
+	<!-- redis sharding配置 -->
+	<bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisPool" scope="singleton">
+		<constructor-arg index="0" ref="jedisPoolConfig" />
+		<constructor-arg index="1">
+			<list>
+				<bean class="redis.clients.jedis.JedisShardInfo">
+					<constructor-arg index="0" value="${redis1.host}"  />
+					<constructor-arg index="1" value="${redis1.port}" />
+					<constructor-arg index="2" value="redis1" />
+					<property name="password" value="${redis1.password}" />
+<!-- 					<property name="connectionTimeout" value="${redis.timeOut}" /> -->
+				</bean>
+				<bean  class="redis.clients.jedis.JedisShardInfo">
+					<constructor-arg index="0" value="${redis2.host}"/>
+					<constructor-arg index="1" value="${redis2.port}" />
+					<constructor-arg index="2" value="redis2"/>
+					<property name="password" value="${redis2.password}" />
+<!-- 					<property name="connectionTimeout" value="${redis.timeOut}" /> -->
+				</bean>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<!-- redis jedisPoolConfig配置 -->
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxTotal" value="${redis.maxTotal}" />
+		<property name="maxIdle" value="${redis.maxIdle}" />
+		<property name="maxWaitMillis" value="${redis.maxWait}" />
+		<property name="testOnBorrow" value="${redis.testOnBorrow}" />
+	</bean>
+</beans>

@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorator="layout/monitorFullPageLayout">
+<body>
+<div layout:fragment="content">
+    <div id="dialog" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog"
+         aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="addMonitorDialog">通知</h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button id="diaglogOK" class="btn btn-primary" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header" th:if="${addMonitorForm.monitorHostFormList == null}">添加监控系统</h1>
+                <h1 class="page-header" th:if="${addMonitorForm.monitorHostFormList != null}">修改监控系统</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container">
+                <div class="stepwizard">
+                    <div class="stepwizard-row setup-panel">
+                        <div class="stepwizard-step">
+                            <a href="#step-1" type="button" class="btn btn-primary btn-circle">1</a>
+                            <p th:if="${addMonitorForm.monitorHostFormList == null}">添加监控系统</p>
+                            <p th:if="${addMonitorForm.monitorHostFormList != null}">修改监控系统</p>
+                        </div>
+                        <div class="stepwizard-step">
+                            <a href="#step-2" type="button" class="btn btn-default btn-circle" disabled="disabled">2</a>
+                            <p th:if="${addMonitorForm.monitorHostFormList == null}">添加监控策略</p>
+                            <p th:if="${addMonitorForm.monitorHostFormList != null}">修改监控策略</p>
+                        </div>
+                    </div>
+                </div>
+                <form role="form" action="#" th:action="@{/monitor/add}" method="post" th:object="${addMonitorForm}"
+                      id="addMonitorForm">
+                    <div class="row setup-content" id="step-1">
+                        <div class="col-xs-12">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label">系统名称</label>
+                                    <input maxlength="100" type="text" required="required" class="form-control"
+                                           th:field="*{systemName}" placeholder="系统名称"/>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">是否采集地区数据</label>
+                                    <select class="form-control"
+                                            th:field="*{isIp}" required="required">
+                                        <option value="0">否</option>
+                                        <option value="1">是</option>
+                                    </select>
+                                </div>
+                                <div class="control-group" id="fields">
+                                    <label class="control-label" for="field1">Host</label>
+                                    <div class="controls">
+
+                                        <div class="entry input-group col-xs-12" th:if="*{monitorHostFormList != null}"
+                                             th:each="monitorHost,rowStat:*{monitorHostFormList}"
+                                             th:with="ssize=*{#lists.size(monitorHostFormList)}">
+                                            <div class="row">
+                                                <input type="hidden"
+                                                       th:field="*{monitorHostFormList[__${rowStat.index}__].id}"/>
+                                                <div class="col-xs-2">
+                                                    <input class="form-control" name="fields[0]" type="text"
+                                                           required="required"
+                                                           placeholder="主机名"
+                                                           th:field="*{monitorHostFormList[__${rowStat.index}__].hostName}"/>
+                                                </div>
+                                                <div class="col-xs-2">
+                                                    <input class="form-control" name="fields[1]" type="text"
+                                                           required="required"
+                                                           placeholder="IP"
+                                                           th:field="*{monitorHostFormList[__${rowStat.index}__].ip}"/>
+                                                </div>
+                                                <div class="col-xs-2">
+                                                    <input class="form-control" name="fields[2]" type="text"
+                                                           required="required"
+                                                           placeholder="系统"
+                                                           th:field="*{monitorHostFormList[__${rowStat.index}__].os}"/>
+                                                </div>
+                                                <div class="col-xs-5 input-group">
+                                                    <input class="form-control" name="fields[3]" type="text"
+                                                           placeholder="备注"
+                                                           th:field="*{monitorHostFormList[__${rowStat.index}__].detail}"/>
+                                                    <span class="input-group-btn">
+                                                            <button class="btn btn-success btn-add" type="button"
+                                                                    th:if="${rowStat.index == (ssize-1)}">
+                                                                <span class="glyphicon glyphicon-plus"></span>
+                                                            </button>
+
+                                                            <button class="btn btn-danger btn-remove" type="button"
+                                                                    th:if="${rowStat.index != (ssize-1)}">
+                                                                <span class="glyphicon glyphicon-minus"></span>
+                                                            </button>
+                                                        </span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="entry input-group col-xs-12" th:if="*{monitorHostFormList == null}">
+                                            <div class="row">
+                                                <div class="col-xs-2">
+                                                    <input class="form-control" name="fields[0]" type="text"
+                                                           required="required"
+                                                           placeholder="主机名"
+                                                           th:field="*{monitorHostFormList[0].hostName}"/>
+                                                </div>
+                                                <div class="col-xs-2">
+                                                    <input class="form-control" name="fields[1]" type="text"
+                                                           required="required"
+                                                           placeholder="IP"
+                                                           th:field="*{monitorHostFormList[0].ip}"/>
+                                                </div>
+                                                <div class="col-xs-2">
+                                                    <input class="form-control" name="fields[2]" type="text"
+                                                           required="required"
+                                                           placeholder="系统"
+                                                           th:field="*{monitorHostFormList[0].os}"/>
+                                                </div>
+                                                <div class="col-xs-5 input-group">
+                                                    <input class="form-control" name="fields[3]" type="text"
+                                                           placeholder="备注"
+                                                           th:field="*{monitorHostFormList[0].detail}"/>
+                                                    <span class="input-group-btn">
+                                                            <button class="btn btn-success btn-add" type="button">
+                                                                <span class="glyphicon glyphicon-plus"></span>
+                                                            </button>
+                                                        </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <br/>
+                                <div class="form-group">
+                                    <label class="control-label">备注</label>
+                                    <input maxlength="100" type="text" class="form-control"
+                                           placeholder="备注" th:field="*{detail}"/>
+                                </div>
+                                <button class="btn btn-primary nextBtn btn-lg pull-right" type="button">下一步</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row setup-content" id="step-2">
+                        <div class="col-xs-12">
+                            <div class="container-fluid">
+                                <div class="panel-group" id="accordion1">
+                                    <input type="hidden" th:field="*{id}" id="hid"/>
+                                    <div class="panel panel-default template"
+                                         th:each="monitorStrategy,rowStat:*{monitorStrategyFormList}"
+                                         th:if="${addMonitorForm.monitorStrategyFormList != null}"
+                                         th:with="sssize=*{#lists.size(monitorStrategyFormList)}">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a class="accordion-toggle" data-toggle="collapse"
+                                                   data-parent="#accordion1" th:href="'#collapse'+ ${rowStat.index + 1}"
+                                                   th:text="*{monitorStrategyFormList[__${rowStat.index}__].monitorName} + '#'+ ${rowStat.index + 1}">
+                                                    监控策略 #1
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div th:id="'collapse'+ ${rowStat.index + 1}" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                <fieldset>
+                                                    <div class="row">
+                                                        <input type="hidden"
+                                                               th:field="*{monitorStrategyFormList[__${rowStat.index}__].id}"/>
+                                                        <div class="col-md-6 form-group">
+                                                            <label class="control-label">监控名称</label>
+                                                            <input maxlength="1000" type="text" required="required"
+                                                                   class="form-control"
+                                                                   th:field="*{monitorStrategyFormList[__${rowStat.index}__].monitorName}"
+                                                                   placeholder="请输入监控名称"/>
+                                                        </div>
+                                                        <div class="col-md-6 form-group">
+                                                            <label class="control-label">报警策略</label>
+                                                            <div class="form-inline">
+                                                                <select class="form-control"
+                                                                        th:field="*{monitorStrategyFormList[__${rowStat.index}__].alarmId}"
+                                                                        th:if="!${#lists.isEmpty(alarmStrategies)}">
+                                                                    <option th:each="alarmStrategy : ${alarmStrategies}"
+                                                                            th:value="${alarmStrategy.id}"
+                                                                            th:text="${alarmStrategy.alarmName}">
+                                                                    </option>
+                                                                </select>
+                                                                <a class="btn btn-success btn-add" type="button"
+                                                                   onclick="javascript:window.location.href='/alarm/add'">
+                                                                    添加报警策略
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-3 form-group">
+                                                            <label class="control-label">监控策略类型</label>
+                                                            <div class="form-inline">
+                                                                <select class="form-control"
+                                                                        th:field="*{monitorStrategyFormList[__${rowStat.index}__].strategyType}">
+                                                                    <option value="1">异常监控</option>
+                                                                    <option value="2">节点监控</option>
+                                                                    <option value="3">节点比例监控</option>
+                                                                    <option value="4">节点数据监控</option>
+                                                                    <option value="0">其他</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 form-group">
+                                                            <label class="control-label">监控策略状态</label>
+                                                            <div class="form-inline">
+                                                                <select class="form-control"
+                                                                        th:field="*{monitorStrategyFormList[__${rowStat.index}__].strategyStatus}">
+                                                                    <option value="1">有效</option>
+                                                                    <option value="2">无效</option>
+                                                                    <option value="3">暂停</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 form-group">
+                                                            <label class="control-label">优先级</label>
+                                                            <div class="form-inline">
+                                                                <select class="form-control"
+                                                                        th:field="*{monitorStrategyFormList[__${rowStat.index}__].priority}">
+                                                                    <option value="1">1</option>
+                                                                    <option value="2">2</option>
+                                                                    <option value="3">3</option>
+                                                                    <option value="4">4</option>
+                                                                    <option value="5">5</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-9 form-group">
+                                                            <label class="control-label">监控发送内容</label>
+                                                            <input maxlength="1000" type="text" class="form-control"
+                                                                   placeholder="请输入监控发送内容"
+                                                                   th:field="*{monitorStrategyFormList[__${rowStat.index}__].sendContent}"/>
+                                                        </div>
+                                                        <div class="col-md-3 form-group">
+                                                            <label class="control-label">是否下发</label>
+                                                            <div class="form-inline">
+                                                                <select class="form-control"
+                                                                        th:field="*{monitorStrategyFormList[__${rowStat.index}__].isSendContent}"
+                                                                        required="required">
+                                                                    <option value="0">否</option>
+                                                                    <option value="1">是</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row"
+                                                         th:if="*{monitorStrategyFormList[__${rowStat.index}__].strategyType}==1">
+                                                        <div class="col-md-6 form-group">
+                                                            <label class="control-label">监控项内容</label>
+                                                            <input maxlength="1000" type="text" required="required"
+                                                                   class="form-control"
+                                                                   placeholder="请输入监控项内容"
+                                                                   th:field="*{monitorStrategyFormList[__${rowStat.index}__].keyWordMonitorStrategy.monitorContent}"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row"
+                                                         th:if="*{monitorStrategyFormList[__${rowStat.index}__].strategyType}==1">
+                                                        <div class="col-md-12 form-group form-inline">
+                                                            <label class="control-label">监控策略</label>
+                                                            <div class="input-group">
+                                                                <input type="text" required="required"
+                                                                       class="form-control"
+                                                                       th:field="*{monitorStrategyFormList[__${rowStat.index}__].keyWordMonitorStrategy.monitorCycle}"/>
+                                                                <div class="input-group-addon">秒</div>
+                                                            </div>
+                                                            经过
+                                                            <div class="input-group">
+                                                                <input type="text" required="required"
+                                                                       class="form-control"
+                                                                       th:field="*{monitorStrategyFormList[__${rowStat.index}__].keyWordMonitorStrategy.occurrentedCount}"/>
+                                                                <div class="input-group-addon">次</div>
+                                                            </div>
+                                                            等待
+                                                            <div class="input-group">
+                                                                <input type="text" required="required"
+                                                                       class="form-control"
+                                                                       th:field="*{monitorStrategyFormList[__${rowStat.index}__].keyWordMonitorStrategy.waitTime}"/>
+                                                                <div class="input-group-addon">秒</div>
+                                                            </div>
+                                                            报警
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row"
+                                                         th:if="*{monitorStrategyFormList[__${rowStat.index}__].strategyType}==2">
+                                                        <div class="col-md-6 form-group">
+                                                            <label class="control-label">节点监控匹配内容</label>
+                                                            <input maxlength="1000" type="text" required="required"
+                                                                   class="form-control"
+                                                                   placeholder="请输入节点监控匹配内容"
+                                                                   th:field="*{monitorStrategyFormList[__${rowStat.index}__].businessNodeMonitorStrategy.monitorConfigContent}"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row"
+                                                         th:if="*{monitorStrategyFormList[__${rowStat.index}__].strategyType}==2">
+                                                        <div class="col-md-12 form-group form-inline">
+                                                            <label class="control-label">节点监控策略</label>
+                                                            超过
+                                                            <div class="input-group">
+                                                                <input type="text" required="required"
+                                                                       class="form-control"
+                                                                       th:field="*{monitorStrategyFormList[__${rowStat.index}__].businessNodeMonitorStrategy.monitorCycle}"/>
+                                                                <div class="input-group-addon">秒</div>
+                                                            </div>
+                                                            内容匹配次数
+                                                            <div class="input-group">
+                                                                <select class="form-control" required="required"
+                                                                        th:field="*{monitorStrategyFormList[__${rowStat.index}__].businessNodeMonitorStrategy.compareMethod}">
+                                                                    <option value="1">大于</option>
+                                                                    <option value="0">等于</option>
+                                                                    <option value="-1">小于</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="input-group">
+                                                                <input type="text" required="required"
+                                                                       class="form-control"
+                                                                       th:field="*{monitorStrategyFormList[__${rowStat.index}__].businessNodeMonitorStrategy.compareValue}"/>
+                                                                <div class="input-group-addon">次</div>
+                                                            </div>
+                                                            报警
+                                                        </div>
+                                                    </div>
+                                                    <div class="row"
+                                                         th:if="*{monitorStrategyFormList[__${rowStat.index}__].strategyType}==3">
+                                                        <div class="col-md-4 form-group">
+                                                            <label class="control-label">节点数据比例监控分子</label>
+                                                            <input maxlength="1000" type="text"
+                                                                   required="required"
+                                                                   class="form-control"
+                                                                   placeholder="请输入节点分子匹配内容"
+                                                                   th:field="*{monitorStrategyFormList[__${rowStat.index}__].businessNodePercentMonitorStrategy.monitorContentFrac}"/>
+                                                        </div>
+                                                        <div class="col-md-1 form-group">
+                                                            <label class="control-label">除以</label>
+                                                        </div>
+                                                        <div class="col-md-4 form-group">
+                                                            <label class="control-label">节点数据比例监控分母</label>
+                                                            <input maxlength="1000" type="text"
+                                                                   required="required"
+                                                                   class="form-control"
+                                                                   placeholder="请输入节点分母匹配内容"
+                                                                   th:field="*{monitorStrategyFormList[__${rowStat.index}__].businessNodePercentMonitorStrategy.monitorContentNume}"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row"
+                                                         th:if="*{monitorStrategyFormList[__${rowStat.index}__].strategyType}==3">
+                                                        <div class="col-md-12 form-group form-inline">
+                                                            <label class="control-label">节点数据比例</label>
+                                                            在
+                                                            <div class="input-group">
+                                                                <input type="text" required="required"
+                                                                       class="form-control"
+                                                                       th:field="*{monitorStrategyFormList[__${rowStat.index}__].businessNodePercentMonitorStrategy.monitorCycle}"/>
+                                                                <div class="input-group-addon">秒</div>
+                                                            </div>
+                                                            匹配百分比
+                                                            <div class="input-group">
+                                                                <select class="form-control" required="required"
+                                                                        th:field="*{monitorStrategyFormList[__${rowStat.index}__].businessNodePercentMonitorStrategy.compareMethod}">
+                                                                    <option value="1">大于</option>
+                                                                    <option value="0">等于</option>
+                                                                    <option value="-1">小于</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="input-group">
+                                                                <input type="text" required="required"
+                                                                       onchange="if(!/(^0$)|(^100$)|(^\d{1,2}$)/.test(value)){value='';alert('请输入0~100内整数!');}"
+                                                                       class=" form-control"
+                                                                       th:field="*{monitorStrategyFormList[__${rowStat.index}__].businessNodePercentMonitorStrategy.compareValue}"/>
+                                                                <div class="input-group-addon">%</div>
+                                                            </div>
+                                                            报警
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row"
+                                                         th:if="*{monitorStrategyFormList[__${rowStat.index}__].strategyType}==4">
+                                                        <div class="col-md-12 form-group">
+                                                            <label class="control-label">节点匹配内容step1</label>
+                                                            <input maxlength="1000" type="text" required="required"
+                                                                   class="form-control"
+                                                                   placeholder="请输入节点匹配内容"
+                                                                   th:field="*{monitorStrategyFormList[__${rowStat.index}__].businessNodeNumCompareMonitorStrategy.monitorContentNode}"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row"
+                                                         th:if="*{monitorStrategyFormList[__${rowStat.index}__].strategyType}==4">
+                                                        <div class="col-md-12 form-group">
+                                                            <label class="control-label">节点匹配内容分组step2</label>
+                                                            <input maxlength="1000" type="text" required="required"
+                                                                   class="form-control"
+                                                                   placeholder="请输入节点匹配内容分组"
+                                                                   th:field="*{monitorStrategyFormList[__${rowStat.index}__].businessNodeNumCompareMonitorStrategy.monitorContentGroup}"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row"
+                                                         th:if="*{monitorStrategyFormList[__${rowStat.index}__].strategyType}==4">
+                                                        <div class="col-md-12 form-group">
+                                                            <label class="control-label">节点匹配内容分组数据step3</label>
+                                                            <input maxlength="1000" type="text" required="required"
+                                                                   class="form-control"
+                                                                   placeholder="请输入节点匹配内容分组数据"
+                                                                   th:field="*{monitorStrategyFormList[__${rowStat.index}__].businessNodeNumCompareMonitorStrategy.monitorContentNumber}"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row"
+                                                         th:if="*{monitorStrategyFormList[__${rowStat.index}__].strategyType}==4">
+                                                        <div class="col-md-12 form-group form-inline">
+                                                            <label class="control-label">节点数据</label>
+                                                            <div class="input-group">
+                                                                <select class="form-control" required="required"
+                                                                        th:field="*{monitorStrategyFormList[__${rowStat.index}__].businessNodeNumCompareMonitorStrategy.compareMethod}">
+                                                                    <option value="1">大于</option>
+                                                                    <option value="0">等于</option>
+                                                                    <option value="-1">小于</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="input-group">
+                                                                <input type="text" required="required"
+                                                                       class="form-control"
+                                                                       th:field="*{monitorStrategyFormList[__${rowStat.index}__].businessNodeNumCompareMonitorStrategy.compareValue}"/>
+
+                                                            </div>
+                                                            触发监控报警
+                                                        </div>
+                                                    </div>
+                                                    <div class="row"
+                                                         th:if="*{monitorStrategyFormList[__${rowStat.index}__].strategyType}==4">
+                                                        <div class="col-md-12 form-group form-inline">
+                                                            <label class="control-label">监控策略</label>
+                                                            <div class="input-group">
+                                                                <input type="text" required="required"
+                                                                       class="form-control"
+                                                                       th:field="*{monitorStrategyFormList[__${rowStat.index}__].businessNodeNumCompareMonitorStrategy.monitorCycle}"/>
+                                                                <div class="input-group-addon">秒</div>
+                                                            </div>
+                                                            经过
+                                                            <div class="input-group">
+                                                                <input type="text" required="required"
+                                                                       class="form-control"
+                                                                       th:field="*{monitorStrategyFormList[__${rowStat.index}__].businessNodeNumCompareMonitorStrategy.occurrentedCount}"/>
+                                                                <div class="input-group-addon">次</div>
+                                                            </div>
+                                                            等待
+                                                            <div class="input-group">
+                                                                <input type="text" required="required"
+                                                                       class="form-control"
+                                                                       th:field="*{monitorStrategyFormList[__${rowStat.index}__].businessNodeNumCompareMonitorStrategy.waitTime}"/>
+                                                                <div class="input-group-addon">秒</div>
+                                                            </div>
+                                                            报警
+                                                        </div>
+                                                    </div>
+
+                                                </fieldset>
+                                                <button class="btn btn-lg btn-primary btn-danger btn-remove-panel"
+                                                        th:if="${sssize > 1}"
+                                                        th:id="'removePanel'+ ${rowStat.index +1}">
+                                                    <i class="glyphicon glyphicon-minus"></i> 删除该监控项
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default template"
+                                         th:if="${addMonitorForm.monitorStrategyFormList == null}">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a class="accordion-toggle" data-toggle="collapse"
+                                                   data-parent="#accordion1" href="#collapse1">
+                                                    监控策略 #1
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapse1" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                <fieldset>
+                                                    <div class="row">
+                                                        <div class="col-md-6 form-group">
+                                                            <label class="control-label">监控名称</label>
+                                                            <input maxlength="1000" type="text" required="required"
+                                                                   class="form-control"
+                                                                   th:field="*{monitorStrategyFormList[0].monitorName}"
+                                                                   placeholder="请输入监控名称"/>
+                                                        </div>
+                                                        <div class="col-md-6 form-group">
+                                                            <label class="control-label">报警策略</label>
+                                                            <div class="form-inline">
+                                                                <select class="form-control"
+                                                                        th:field="*{monitorStrategyFormList[0].alarmId}"
+                                                                        th:if="!${#lists.isEmpty(alarmStrategies)}">
+                                                                    <option th:each="alarmStrategy : ${alarmStrategies}"
+                                                                            th:value="${alarmStrategy.id}"
+                                                                            th:text="${alarmStrategy.alarmName}">
+                                                                    </option>
+                                                                </select>
+                                                                <a class="btn btn-success btn-add" type="button"
+                                                                   onclick="javascript:window.location.href='/alarm/add'">
+                                                                    添加报警策略
+                                                                </a>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-3 form-group">
+                                                            <label class="control-label">监控策略类型</label>
+                                                            <div class="form-inline">
+                                                                <select class="form-control"
+                                                                        th:field="*{monitorStrategyFormList[0].strategyType}">
+                                                                    <option value="1">异常监控</option>
+                                                                    <option value="2">节点监控</option>
+                                                                    <option value="3">节点比例监控</option>
+                                                                    <option value="4">节点数据监控</option>
+                                                                    <option value="0">其他</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 form-group">
+                                                            <label class="control-label">监控策略状态</label>
+                                                            <div class="form-inline">
+                                                                <select class="form-control"
+                                                                        th:field="*{monitorStrategyFormList[0].strategyStatus}">
+                                                                    <option value="1">有效</option>
+                                                                    <option value="2">无效</option>
+                                                                    <option value="3">暂停</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3 form-group">
+                                                            <label class="control-label">优先级</label>
+                                                            <div class="form-inline">
+                                                                <select class="form-control"
+                                                                        th:field="*{monitorStrategyFormList[0].priority}">
+                                                                    <option value="1">1</option>
+                                                                    <option value="2">2</option>
+                                                                    <option value="3">3</option>
+                                                                    <option value="4">4</option>
+                                                                    <option value="5">5</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-9 form-group">
+                                                            <label class="control-label">监控发送内容</label>
+                                                            <input maxlength="1000" type="text" class="form-control"
+                                                                   placeholder="请输入监控发送内容"
+                                                                   th:field="*{monitorStrategyFormList[0].sendContent}"/>
+                                                        </div>
+                                                        <div class="col-md-3 form-group">
+                                                            <label class="control-label">是否下发</label>
+                                                            <div class="form-inline">
+                                                                <select class="form-control"
+                                                                        th:field="*{monitorStrategyFormList[0].isSendContent}"
+                                                                        required="required">
+                                                                    <option value="0">否</option>
+                                                                    <option value="1">是</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6 form-group">
+                                                            <label class="control-label">监控项内容</label>
+                                                            <input maxlength="1000" type="text" required="required"
+                                                                   class="form-control"
+                                                                   placeholder="请输入监控项内容"
+                                                                   th:field="*{monitorStrategyFormList[0].keyWordMonitorStrategy.monitorContent}"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12 form-group form-inline">
+                                                            <label class="control-label">监控策略</label>
+                                                            <div class="input-group">
+                                                                <input type="text" required="required"
+                                                                       class="form-control"
+                                                                       th:field="*{monitorStrategyFormList[0].keyWordMonitorStrategy.monitorCycle}"/>
+                                                                <div class="input-group-addon">秒</div>
+                                                            </div>
+                                                            经过
+                                                            <div class="input-group">
+                                                                <input type="text" required="required"
+                                                                       class="form-control"
+                                                                       th:field="*{monitorStrategyFormList[0].keyWordMonitorStrategy.occurrentedCount}"/>
+                                                                <div class="input-group-addon">次</div>
+                                                            </div>
+                                                            等待
+                                                            <div class="input-group">
+                                                                <input type="text" required="required"
+                                                                       class="form-control"
+                                                                       th:field="*{monitorStrategyFormList[0].keyWordMonitorStrategy.waitTime}"/>
+                                                                <div class="input-group-addon">秒</div>
+                                                            </div>
+                                                            报警
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6 form-group">
+                                                            <label class="control-label">节点监控匹配内容</label>
+                                                            <input maxlength="1000" type="text" required="required"
+                                                                   class="form-control"
+                                                                   placeholder="请输入节点监控匹配内容"
+                                                                   th:field="*{monitorStrategyFormList[0].businessNodeMonitorStrategy.monitorConfigContent}"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12 form-group form-inline">
+                                                            <label class="control-label">节点监控策略</label>
+                                                            超过
+                                                            <div class="input-group">
+                                                                <input type="text" required="required"
+                                                                       class="form-control"
+                                                                       th:field="*{monitorStrategyFormList[0].businessNodeMonitorStrategy.monitorCycle}"/>
+                                                                <div class="input-group-addon">秒</div>
+                                                            </div>
+                                                            内容匹配次数
+                                                            <div class="input-group">
+                                                                <select class="form-control" required="required"
+                                                                        th:field="*{monitorStrategyFormList[0].businessNodeMonitorStrategy.compareMethod}">
+                                                                    <option value="1">大于</option>
+                                                                    <option value="0">等于</option>
+                                                                    <option value="-1">小于</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="input-group">
+                                                                <input type="text" required="required"
+                                                                       class="form-control"
+                                                                       th:field="*{monitorStrategyFormList[0].businessNodeMonitorStrategy.compareValue}"/>
+                                                                <div class="input-group-addon">次</div>
+                                                            </div>
+                                                            报警
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br/>
+                                <button class="btn btn-lg btn-primary btn-add-panel">
+                                    <i class="glyphicon glyphicon-plus"></i> 添加监控项
+                                </button>
+                                <button class="btn btn-primary nextBtn btn-lg pull-right"
+                                        value="完成" id="saveBtn">保存
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">添加报警策略</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="alarm-name" class="control-label">报警策略名称:</label>
+                            <input type="text" class="form-control" id="alarm-name"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="alarm-strategy" class="control-label">报警策略:</label>
+                            <textarea class="form-control" id="alarm-strategy"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="alarm-type" class="control-label">报警类型:</label>
+                            <select class="form-control" id="alarm-type">
+                                <option>短信</option>
+                                <option>微信</option>
+                                <option>邮件</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

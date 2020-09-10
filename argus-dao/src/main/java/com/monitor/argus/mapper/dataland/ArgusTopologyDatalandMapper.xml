@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="argusTopologyDatalandMapper">
+    <resultMap id="BaseResultMap" type="com.monitor.argus.bean.dataland.ArgusTopologyDatalandEntity">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="TOTAL_LOG_BYTES" property="totalLogBytes" jdbcType="VARCHAR"/>
+        <result column="TOTAL_LOG_COUNT" property="totalLogCount" jdbcType="VARCHAR"/>
+        <result column="TOTAL_MONITORS" property="totalMonitors" jdbcType="VARCHAR"/>
+        <result column="TOTAL_ALARMS" property="totalAlarms" jdbcType="VARCHAR"/>
+        <result column="DIFF_LOG_BYTES" property="diffLogBytes" jdbcType="VARCHAR"/>
+        <result column="DIFF_LOG_COUNT" property="diffLogCount" jdbcType="VARCHAR"/>
+        <result column="DIFF_MONITORS" property="diffMonitors" jdbcType="VARCHAR"/>
+        <result column="DIFF_ALARMS" property="diffAlarms" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="SumResultMap" type="com.monitor.argus.bean.dataland.ArgusTopologyMorSysSumEntity">
+        <result column="DIFF_MONITORS" property="diffMonitors" jdbcType="VARCHAR"/>
+        <result column="DIFF_ALARMS" property="diffAlarms" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="SumDiffMap" type="com.monitor.argus.bean.dataland.AnalyTopologyDatalandLogDiff">
+        <result column="DIFF_LOG_BYTES" property="diffLogBytes" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    ID, TOTAL_LOG_BYTES, TOTAL_LOG_COUNT, TOTAL_MONITORS, TOTAL_ALARMS, DIFF_LOG_BYTES, DIFF_LOG_COUNT, DIFF_MONITORS, DIFF_ALARMS, CREATE_DATE
+  </sql>
+
+
+    <select id="selectAllArgusTopologyData" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_topo_argustopology_data order by CREATE_DATE DESC
+    </select>
+
+    <insert id="insert" parameterType="com.monitor.argus.bean.dataland.ArgusTopologyDatalandEntity">
+    replace into t_topo_argustopology_data (ID, TOTAL_LOG_BYTES, TOTAL_LOG_COUNT, TOTAL_MONITORS,
+     TOTAL_ALARMS, DIFF_LOG_BYTES, DIFF_LOG_COUNT, DIFF_MONITORS, DIFF_ALARMS, CREATE_DATE)
+    values (#{id,jdbcType=VARCHAR}, #{totalLogBytes,jdbcType=VARCHAR},
+      #{totalLogCount,jdbcType=VARCHAR}, #{totalMonitors,jdbcType=VARCHAR},
+      #{totalAlarms,jdbcType=VARCHAR}, #{diffLogBytes,jdbcType=VARCHAR},
+      #{diffLogCount,jdbcType=VARCHAR}, #{diffMonitors,jdbcType=VARCHAR},
+      #{diffAlarms,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+
+    <select id="getDataByDate" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_topo_argustopology_data
+        <where>
+            <if test="beginDate != null and beginDate.length() > 0">
+                create_date > #{beginDate}
+            </if>
+            <if test="endDate != null and endDate.length() > 0">
+                and create_date &lt; #{endDate}
+            </if>
+        </where>
+        order by CREATE_DATE
+    </select>
+
+    <delete id="delByDate" parameterType="map">
+        delete from t_topo_argustopology_data
+        <where>
+            <if test="endDate != null and endDate.length() > 0">
+                create_date &lt;= #{endDate}
+            </if>
+        </where>
+    </delete>
+
+    <select id="getMorSysSumData" parameterType="map" resultMap="SumResultMap">
+        SELECT
+        DATE_FORMAT(create_date, '%m-%d') as create_date,
+        SUM(diff_monitors) as diff_monitors,
+        SUM(diff_alarms) as diff_alarms
+        FROM t_topo_argustopology_data
+        WHERE create_date > #{beginDate} and create_date &lt; #{endDate}
+        GROUP BY DATE_FORMAT(create_date, '%m-%d')
+        ORDER BY DATE_FORMAT(create_date, '%m-%d');
+    </select>
+
+    <select id="getDiffLogBytes" parameterType="map" resultMap="SumDiffMap">
+        select
+        DATE_FORMAT(create_date, '%m-%d') as create_date,
+        sum(DIFF_LOG_BYTES) as DIFF_LOG_BYTES
+        FROM t_topo_argustopology_data
+        where create_date > #{beginDate} and create_date &lt; #{endDate}
+        GROUP BY DATE_FORMAT(create_date, '%m-%d')
+        ORDER BY DATE_FORMAT(create_date, '%m-%d');
+    </select>
+
+</mapper>

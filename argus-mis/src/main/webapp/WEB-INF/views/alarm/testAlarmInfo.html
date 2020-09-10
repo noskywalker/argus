@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorator="layout/fullTestAlarmInfo">
+<body>
+<div layout:fragment="content">
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">手工推送报警</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        报警信息
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="dataTable_wrapper">
+                            <div>
+                                报警ID：<input id="alid" type="text" name="" /><br/><br/>
+                                下发内容：<input id="mesg" type="text" name="" /><br/><br/>
+                                系统名称：<input id="sysname" type="text" name="" /><br/><br/>
+                                <button onclick="onSubmitClickAlarm();" class="btn btn-success">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+    </div>
+</div>
+</body>
+</html>

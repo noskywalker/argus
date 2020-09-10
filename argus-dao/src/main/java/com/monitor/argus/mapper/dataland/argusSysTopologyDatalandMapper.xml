@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="argusSysTopologyDatalandMapper">
+    <resultMap id="BaseResultMap" type="com.monitor.argus.bean.dataland.AnalyTopologySysDatalandEntity">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="LOG_BYTES" property="logBytes" jdbcType="VARCHAR"/>
+        <result column="DIFF_LOG_BYTES" property="diffLogBytes" jdbcType="VARCHAR"/>
+        <result column="SYSTEM_ID" property="systemId" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, LOG_BYTES, DIFF_LOG_BYTES, SYSTEM_ID, CREATE_DATE
+    </sql>
+
+    <select id="selectAllSysData" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_topo_argustopology_sysdata order by CREATE_DATE DESC
+    </select>
+
+    <insert id="insert" parameterType="com.monitor.argus.bean.dataland.AnalyTopologySysDatalandEntity">
+        replace into t_topo_argustopology_sysdata (ID, LOG_BYTES, DIFF_LOG_BYTES, SYSTEM_ID, CREATE_DATE)
+        values (#{id,jdbcType=VARCHAR}, #{logBytes,jdbcType=VARCHAR}, #{diffLogBytes,jdbcType=VARCHAR}, #{systemId,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <select id="getSysDataByDateHour" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_topo_argustopology_sysdata
+        <where>
+            <if test="beginDate != null and beginDate.length() > 0">
+                create_date > #{beginDate}
+            </if>
+            <if test="endDate != null and endDate.length() > 0">
+                and create_date &lt; #{endDate}
+            </if>
+            <if test="systemId != null and systemId.length() > 0">
+                and SYSTEM_ID = #{systemId}
+            </if>
+        </where>
+        order by CREATE_DATE
+    </select>
+
+    <delete id="delSysDataTopologyDatalandByM" parameterType="map">
+        delete from t_topo_argustopology_sysdata
+        <where>
+            <if test="endDate != null and endDate.length() > 0">
+                create_date &lt;= #{endDate}
+            </if>
+        </where>
+    </delete>
+
+</mapper>

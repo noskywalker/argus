@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorator="layout/nodepvcollectFullPageLayout">
+<head>
+    <style>
+        .content {
+            font-family: Arial;
+        }
+
+        .headerbg td {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .tabletree4j-gird td {
+            text-align: center;
+            height: 30px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <!-- Navigation -->
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">节点PV/UV月汇总</h1>
+            </div>
+        </div>
+
+        <div class="row" style="font-size:16px;">
+            <div class="col-md-2">起止时间：</div>
+            <div class="col-md-3">
+                <div class="input-group date form_date col-md-10" data-date="" data-date-format="yyyy-mm-dd"
+                     data-link-field="dtp_input1" data-link-format="yyyy-mm-dd">
+                    <input id="dtp_input1" class="form-control" size="10" type="text" placeholder="请选择开始时间" value=""
+                           readonly="readonly"/>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+            <div class="col-md-1">~</div>
+            <div class="col-md-3">
+
+                <div class="input-group date form_date col-md-10" data-date="" data-date-format="yyyy-mm-dd"
+                     data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                    <input id="dtp_input2" class="form-control" size="10" type="text" placeholder="请选择结束时间" value=""
+                           readonly="readonly"/>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+
+            </div>
+            <div class="col-md-1">
+                <button class="btn btn-primary" onclick="onQueryClick();">查&nbsp;&nbsp;询
+                </button>
+            </div>
+        </div>
+        <br/>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-tasks fa-fw"></i>节点PV/UV月汇总
+                    </div>
+                    <div class="panel-body">
+                        <div id="pvCollect" class="content"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.panel-body -->
+</div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content="Argus"/>
+    <meta name="author" content="Argus"/>
+
+    <!--  <title th:unless="${pageTitle == 'TEMPLATE'}" th:utext="${#strings.isEmpty(pageTitle) ? 'Good2Go' : pageTitle}"></title>-->
+
+    <title>Argus监控报警系统</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../../static/css/bootstrap/bootstrap.min.css" rel="stylesheet"
+          th:href="@{/static/css/bootstrap/bootstrap.min.css}"/>
+
+    <!-- MetisMenu CSS -->
+    <link href="../../static/css/metisMenu/metisMenu.min.css" rel="stylesheet"
+          th:href="@{/static/css/metisMenu/metisMenu.min.css}"/>
+
+    <!-- Custom CSS -->
+    <link href="../../static/css/sbadmin2/sb-admin-2.css" rel="stylesheet"
+          th:href="@{/static/css/sbadmin2/sb-admin-2.css}"/>
+
+    <!-- Custom Fonts -->
+    <link href="../../static/css/font-awesome/font-awesome.min.css" rel="stylesheet" type="text/css"
+          th:href="@{/static/css/font-awesome/font-awesome.min.css}"/>
+
+    <!-- Timeline CSS -->
+    <link href="../../static/css/sbadmin2/timeline.css"
+          th:href="@{/static/css/sbadmin2/timeline.css}" rel="stylesheet"/>
+
+    <!-- Morris Charts CSS -->
+    <link href="../../static/css/morrisjs/morris.css"
+          th:href="@{/static/css/morrisjs/morris.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<div th:replace="layout/partials/header :: header">
+</div>
+
+<div layout:fragment="content"/>
+
+<!-- jQuery -->
+<script src="../../static/js/jquery/jquery.min.js" th:src="@{/static/js/jquery/jquery.js}"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="../../static/js/bootstrap/bootstrap.min.js" th:src="@{/static/js/bootstrap/bootstrap.min.js}"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="../../static/js/metisMenu/metisMenu.min.js" th:src="@{/static/js/metisMenu/metisMenu.min.js}"></script>
+
+
+<script src="../../static/js/flot/excanvas.min.js" th:src="@{/static/js/flot/excanvas.min.js}"></script>
+<script src="../../static/js/flot/jquery.flot.js" th:src="@{/static/js/flot/jquery.flot.js}"></script>
+<script src="../../static/js/flot/jquery.flot.pie.js" th:src="@{/static/js/flot/jquery.flot.pie.js}"></script>
+<script src="../../static/js/flot/jquery.flot.resize.js" th:src="@{/static/js/flot/jquery.flot.resize.js}"></script>
+<script src="../../static/js/flot/jquery.flot.time.js" th:src="@{/static/js/flot/jquery.flot.time.js}"></script>
+<script src="../../static/js/flot/jquery.flot.tooltip.min.js"
+        th:src="@{/static/js/flot/jquery.flot.tooltip.min.js}"></script>
+
+<!-- Morris Charts JavaScript -->
+<script src="../../static/js/system/hanHeader.js" th:src="@{/static/js/system/hanHeader.js}"></script>
+<script src="../../static/js/echarts/echarts.js" th:src="@{/static/js/echarts/echarts.min.js}"></script>
+<script src="../../static/js/echarts/echarts.js" th:src="@{/static/js/json/json2.js}"></script>
+<script src="../../static/js/security/traffic.js" th:src="@{/static/js/security/traffic.js}"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="../../static/js/sbadmin2/sb-admin-2.js" th:src="@{/static/js/sbadmin2/sb-admin-2.js}"></script>
+</body>
+
+</html>

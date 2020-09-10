@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorator="layout/alarmStrategyFullPageLayout">
+<body>
+<div layout:fragment="content">
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">定时任务策略配置</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <form role="form" action="#" th:action="@{'/job/configStrategyConfirm?hanId='+${hanId}}" method="post" id="configStrategyForm">
+                            <div class="row">
+                                <div class="col-lg-10">
+                                    <div class="col-lg-10">
+                                        <div class="container-fluid">
+                                            <fieldset>
+                                                <div class="row">
+                                                    <div class="col-md-8 form-group">
+                                                        <input type="hidden" th:field="*{jobDetail.id}" id="hid"/>
+                                                        <label class="control-label">任务名称：</label>
+                                                        <span th:text="${jobDetail.jobName}"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-8 form-group">
+                                                        <label class="control-label">任务ID：</label>
+                                                        <span th:text="${jobDetail.id}"></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6 form-group">
+                                                        <label for="monitorStrategyId" class="control-label">非实时监控策略:</label>
+                                                        <select class="form-control" id="monitorStrategyId"
+                                                                th:field="*{jobDetail.monitorId}"
+                                                                th:if="!${#lists.isEmpty(monitorCheck)}">
+                                                            <option th:each="monitorc : ${monitorCheck}"
+                                                                    th:value="${monitorc.id}"
+                                                                    th:text="${monitorc.monitorName}">
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <button class="btn btn-primary nextBtn btn-lg pull-right" type="submit" value="完成" id="saveBtn1" >确认</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+    </div>
+</div>
+</body>
+</html>

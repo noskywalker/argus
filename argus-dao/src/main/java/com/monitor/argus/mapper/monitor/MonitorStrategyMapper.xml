@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="monitorStrategyMapper">
+    <resultMap id="BaseResultMap" type="com.monitor.argus.bean.monitor.MonitorStrategyEntity">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="MONITOR_NAME" property="monitorName" jdbcType="VARCHAR"/>
+        <result column="SYSTEM_ID" property="systemId" jdbcType="VARCHAR"/>
+        <result column="ALARM_ID" property="alarmId" jdbcType="VARCHAR"/>
+        <result column="MONITOR_STRATEGY" property="monitorStrategy" jdbcType="VARCHAR"/>
+        <result column="STRATEGY_TYPE" property="strategyType" jdbcType="INTEGER"/>
+        <result column="PRIORITY" property="priority" jdbcType="INTEGER"/>
+        <result column="STRATEGY_STATUS" property="strategyStatus" jdbcType="INTEGER"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="MONITOR_CIRCLE_STRATEGY" property="sendContent" jdbcType="VARCHAR"/>
+        <result column="IS_SEND_CONTENT" property="isSendContent" jdbcType="INTEGER"/>
+        <result column="IS_RUN_TIME" property="isRunTime" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, MONITOR_NAME, SYSTEM_ID, ALARM_ID, MONITOR_STRATEGY, STRATEGY_TYPE, PRIORITY,
+    STRATEGY_STATUS, CREATE_DATE, MONITOR_CIRCLE_STRATEGY, IS_SEND_CONTENT, IS_RUN_TIME
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from t_monitor_strategy
+        where ID = #{id,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAllEnableStrategy" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from t_monitor_strategy
+        where STRATEGY_STATUS =1
+    </select>
+    <insert id="insert" parameterType="com.monitor.argus.bean.monitor.MonitorStrategyEntity">
+    replace into t_monitor_strategy (ID, MONITOR_NAME,
+      SYSTEM_ID, ALARM_ID, MONITOR_STRATEGY, STRATEGY_TYPE, PRIORITY, STRATEGY_STATUS, CREATE_DATE, MONITOR_CIRCLE_STRATEGY, IS_SEND_CONTENT, IS_RUN_TIME
+      )
+    values (#{id,jdbcType=VARCHAR}, #{monitorName,jdbcType=VARCHAR},
+      #{systemId,jdbcType=VARCHAR}, #{alarmId,jdbcType=VARCHAR},
+      #{monitorStrategy,jdbcType=VARCHAR},#{strategyType,jdbcType=INTEGER},
+      #{priority,jdbcType=INTEGER},#{strategyStatus,jdbcType=INTEGER},#{createDate,jdbcType=TIMESTAMP},
+      #{sendContent,jdbcType=VARCHAR},#{isSendContent,jdbcType=INTEGER},#{isRunTime,jdbcType=INTEGER}
+      )
+  </insert>
+
+    <select id="getStrategiesByMonitorSystemId" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from t_monitor_strategy
+        where SYSTEM_ID = #{systemId,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteMonitorStrategyBySystemId" parameterType="java.lang.String">
+    delete from t_monitor_strategy
+    where SYSTEM_ID = #{systemId,jdbcType=VARCHAR}
+  </delete>
+
+    <delete id="deleteMonitorStrategyById" parameterType="java.lang.String">
+    delete from t_monitor_strategy
+    where ID = #{id,jdbcType=VARCHAR}
+</delete>
+
+    <select id="getStrategyIdsByMonitorSystemId" resultType="java.lang.String" parameterType="java.lang.String">
+    select
+    id from t_monitor_strategy
+    where SYSTEM_ID = #{systemId,jdbcType=VARCHAR}
+  </select>
+
+    <select id="getStrategyByCondition" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_monitor_strategy
+        <where>
+            <if test="id != null and id.length() > 0">
+                id = #{id}
+            </if>
+            <if test="monitorName != null and monitorName.length() > 0">
+                and monitor_name = #{monitorName}
+            </if>
+            <if test="systemId != null and systemId.length() > 0">
+                and system_id = #{systemId}
+            </if>
+            <if test="alarmId != null and alarmId.length() > 0">
+                and alarm_id = #{alarmId}
+            </if>
+            <if test="monitorStrategy != null and monitorStrategy.length() > 0">
+                and monitor_strategy = #{monitorStrategy}
+            </if>
+            <if test="strategyType != null and strategyType > 0">
+                and strategy_type = #{strategyType}
+            </if>
+            <if test="priority != null and priority > 0">
+                and priority = #{priority}
+            </if>
+            <if test="strategyStatus != null and strategyStatus > 0">
+                and strategy_status = #{strategyStatus}
+            </if>
+            <if test="isRunTime != null">
+                and IS_RUN_TIME = #{isRunTime}
+            </if>
+        </where>
+
+    </select>
+
+    <update id="changeStrategyStatus" parameterType="map">
+        update t_monitor_strategy set strategy_status = #{status} where id = #{id}
+    </update>
+
+    <update id="updateMonitorStrategyById" parameterType="map">
+        update t_monitor_strategy
+        <set>
+            <if test="monitorName != null and monitorName.length() > 0">
+                monitor_name = #{monitorName},
+            </if>
+            <if test="systemId != null and systemId.length() > 0">
+                system_id = #{systemId},
+            </if>
+            <if test="alarmId != null and alarmId.length() > 0">
+                alarm_id = #{alarmId},
+            </if>
+            <if test="monitorStrategy != null and monitorStrategy.length() > 0">
+                monitor_strategy = #{monitorStrategy},
+            </if>
+            <if test="strategyType != null">
+                strategy_type = #{strategyType},
+            </if>
+            <if test="priority != null">
+                priority = #{priority},
+            </if>
+            <if test="strategyStatus != null">
+                strategy_status = #{strategyStatus},
+            </if>
+            <if test="sendContent != null and sendContent.length() > 0">
+                MONITOR_CIRCLE_STRATEGY = #{sendContent},
+            </if>
+            <if test="isSendContent != null">
+                is_send_content = #{isSendContent},
+            </if>
+            <if test="isRunTime != null">
+                IS_RUN_TIME = #{isRunTime}
+            </if>
+        </set>
+        where id = #{id}
+
+    </update>
+</mapper>

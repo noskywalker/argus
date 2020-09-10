@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="topoAnalyMapper">
+    <resultMap id="BaseResultMap" type="com.monitor.argus.bean.node.TopoAnalyEntity">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="node_key" property="nodeKey" jdbcType="VARCHAR"/>
+        <result column="log_count" property="logCount" jdbcType="VARCHAR"/>
+        <result column="diff_log_count" property="diffLogCount" jdbcType="VARCHAR"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="create_date_str" property="createDateStr" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="UVResultMap" type="com.monitor.argus.bean.node.TopoAnalyDayUVEntity">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="node_key" property="nodeKey" jdbcType="VARCHAR"/>
+        <result column="uv_count" property="UVCount" jdbcType="VARCHAR"/>
+        <!--<result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>-->
+        <result column="create_date" property="createDateStr" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="PVUVCountResultMap" type="com.monitor.argus.bean.node.CollectDataObject">
+        <result column="node_key" property="nodeName" jdbcType="VARCHAR"/>
+        <result column="create_date_str" property="date" jdbcType="VARCHAR"/>
+        <result column="count_pv" property="countpv" jdbcType="VARCHAR"/>
+        <result column="count_uv" property="countuv" jdbcType="VARCHAR"/>
+
+    </resultMap>
+
+    <resultMap id="TopoHourITEntity" type="com.monitor.argus.bean.dataland.AnalyTopologyHourITEntity">
+        <id column="ID" property="id" jdbcType="VARCHAR"/>
+        <result column="it_count" property="count" jdbcType="VARCHAR"/>
+        <result column="all_time" property="alltime" jdbcType="VARCHAR"/>
+        <result column="per_time" property="pertime" jdbcType="DOUBLE"/>
+        <result column="node_key" property="nodeKey" jdbcType="VARCHAR"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="create_date_str" property="createDateStr" jdbcType="VARCHAR"/>
+
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+        id,node_name,node_key,node_system_name,node_system_id,node_url,enable,create_date
+    </sql>
+
+    <sql id="UV_Column_List">
+        id,node_key,uv_count,create_date
+    </sql>
+
+
+    <select id="selectByHours" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        DATE_FORMAT(create_date, '%H:00') as create_date_str,
+        SUM(diff_log_count) as diff_log_count
+        FROM t_topo_analy_minute_data
+        WHERE create_date > #{beginDate} and create_date &lt; #{endDate}
+        and node_key = #{nodeKey}
+        GROUP BY DATE_FORMAT(create_date, '%Y-%m-%d %H')
+        ORDER BY DATE_FORMAT(create_date, '%Y-%m-%d %H');
+    </select>
+
+    <select id="selectByMinutes" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        DATE_FORMAT(create_date, '%H:%i') as create_date_str,
+        diff_log_count as diff_log_count
+        FROM t_topo_analy_minute_data
+        WHERE create_date > #{beginDate} and create_date &lt; #{endDate}
+        and node_key = #{nodeKey}
+        GROUP BY DATE_FORMAT(create_date, '%Y-%m-%d %H-%i')
+        ORDER BY DATE_FORMAT(create_date, '%Y-%m-%d %H-%i');
+    </select>
+
+    <select id="selectByDays" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        DATE_FORMAT(create_date, '%m-%d') as create_date_str,
+        SUM(diff_log_count) as diff_log_count
+        FROM t_topo_analy_hour_data
+        WHERE create_date > #{beginDate} and create_date &lt; #{endDate}
+        and node_key = #{nodeKey}
+        GROUP BY DATE_FORMAT(create_date, '%Y-%m-%d')
+        ORDER BY DATE_FORMAT(create_date, '%Y-%m-%d');
+    </select>
+
+    <select id="selectDayUVByNodeKey" parameterType="map" resultMap="UVResultMap">
+        SELECT
+        node_key,uv_count,DATE_FORMAT(create_date, '%m-%d') as create_date
+        from argus.t_topo_analy_dayuv_data
+        where node_key = #{nodeKey}
+        and create_date > #{beginDate} and create_date &lt; #{endDate}
+        order by create_date
+    </select>
+
+    <select id="selectCountPVByDateCount" parameterType="map" resultMap="PVUVCountResultMap">
+        select 
+        sum(diff_log_count) as count_pv,DATE_FORMAT(create_date, '%Y-%m-%d') as create_date_str
+        from t_topo_analy_hour_data
+        where create_date > #{beginDate} and create_date &lt; #{endDate}
+        GROUP BY DATE_FORMAT(create_date, '%y-%m-%d')
+        order by DATE_FORMAT(create_date, '%y-%m-%d') desc
+    </select>
+
+    <select id="selectCountPVByDate" parameterType="map" resultMap="PVUVCountResultMap">
+        select
+        sum(diff_log_count) as count_pv, DATE_FORMAT(create_date, '%Y-%m-%d') as create_date_str,node_key
+        from t_topo_analy_hour_data
+        where create_date > #{beginDate} and create_date &lt; #{endDate}
+        GROUP BY DATE_FORMAT(create_date, '%Y-%m-%d'),node_key
+        order by DATE_FORMAT(create_date, '%y-%m-%d') desc
+
+    </select>
+
+    <select id="selectCountUVByDateCount" parameterType="map" resultMap="PVUVCountResultMap">
+        select
+        sum(uv_count) as count_uv,DATE_FORMAT(create_date, '%Y-%m-%d') as create_date_str
+        from t_topo_analy_dayuv_data
+        where create_date >= #{beginDate} and create_date &lt; #{endDate}
+        GROUP BY DATE_FORMAT(create_date, '%y-%m-%d')
+        order by DATE_FORMAT(create_date, '%y-%m-%d') desc
+    </select>
+
+    <select id="selectCountUVByDate" parameterType="map" resultMap="PVUVCountResultMap">
+        select
+        sum(uv_count) as count_uv, DATE_FORMAT(create_date, '%Y-%m-%d') as create_date_str,node_key
+        from t_topo_analy_dayuv_data
+        where create_date >= #{beginDate} and create_date &lt; #{endDate}
+        GROUP BY DATE_FORMAT(create_date, '%Y-%m-%d'),node_key
+        order by DATE_FORMAT(create_date, '%y-%m-%d') desc
+
+    </select>
+
+    <select id="selectInterTimeByNodeKey" parameterType="map" resultMap="TopoHourITEntity">
+        select id,it_count,all_time,format(per_time,2) as per_time,node_key,create_date,DATE_FORMAT(create_date, '%y-%m-%d %H:%i:%s') as create_date_str
+        from  t_topo_analy_hourit_data
+        where NODE_KEY = #{nodeKey} and  create_date > #{beginDate} and create_date &lt; #{endDate}
+        order by create_date asc
+    </select>
+
+    <select id="getAvgPertimeByNodeKeyAndDate" parameterType="map" resultMap="TopoHourITEntity">
+        select format(avg(per_time),2) as per_time,sum(IT_count) as it_count,
+        DATE_FORMAT(create_date, '%m-%d') as create_date_str
+        from argus.t_topo_analy_hourit_data
+        where NODE_KEY = #{nodeKey} and  create_date > #{beginDate} and create_date &lt; Date_add(#{endDate},INTERVAL 1 day)
+        group by DATE_FORMAT(create_date, '%m-%d')
+        order by DATE_FORMAT(create_date, '%m-%d')  asc
+    </select>
+
+    <select id="getInterRankingList"  resultMap="TopoHourITEntity">
+        SELECT node_key, format(AVG(per_time), 2) AS per_time, SUM(it_count) AS it_count
+        FROM t_topo_analy_hourit_data
+        GROUP BY node_key
+        ORDER BY AVG(per_time) DESC;
+    </select>
+
+    <select id="getInterRankingListAsc"  resultMap="TopoHourITEntity">
+        SELECT node_key, format(AVG(per_time), 2) AS per_time, SUM(it_count) AS it_count
+        FROM t_topo_analy_hourit_data
+        GROUP BY node_key
+        ORDER BY AVG(per_time) ASC;
+    </select>
+
+</mapper>

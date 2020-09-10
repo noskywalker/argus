@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorator="layout/groupFullPageLayout">
+<body>
+<div layout:fragment="content">
+    <div id="dialog" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog"
+         aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="addMonitorDialog">通知</h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button id="diaglogOK" class="btn btn-primary" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header" th:if="${addGroupForm.id == null}">添加用户组</h1>
+                <h1 class="page-header" th:if="${addGroupForm.id != null}">编辑用户组</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container">
+                <form role="form" action="#" th:action="@{/group/add}" method="post" th:object="${addGroupForm}"
+                      id="addGroupForm">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-md-12">
+                                <div class="container-fluid">
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-md-6 form-group">
+                                                <input type="hidden" th:field="*{id}" id="hid"/>
+                                                <label class="control-label">用户组名称</label>
+                                                <input maxlength="200" type="text" required="required"
+                                                       class="form-control" th:field="*{groupName}"
+                                                       placeholder="用户组名称"/>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <input type="hidden" th:field="*{groupEnableHidden}" id="henable"/>
+                                                <label class="control-label">组状态</label>
+                                                <div class="switch switch-small">
+                                                    <input type="checkbox" name="enable-checkbox" checked="checked"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 form-group">
+                                                <label for="alarm-type" class="control-label">报警类型:</label>
+                                                <select class="form-control" id="alarm-type" th:field="*{alarmType}">
+                                                    <option value="1">邮件</option>
+                                                    <option value="2">短信</option>
+                                                    <option value="3">微信</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 form-group">
+                                                <label for="alarm-type" class="control-label">报警策略:</label>
+                                                <!--<input type="hidden" th:field="*{alarmId}" id="halarmId"/>-->
+                                                <div class="form-inline">
+                                                    <select class="form-control"
+                                                            th:field="*{alarmId}"
+                                                            id="alarmStrategyList"
+                                                            th:if="!${#lists.isEmpty(alarmStrategies)}">
+                                                        <option th:each="alarmStrategy : ${alarmStrategies}"
+                                                                th:value="${alarmStrategy.id}"
+                                                                th:text="${alarmStrategy.alarmName}">aa
+                                                        </option>
+                                                    </select>
+                                                    <a class="btn btn-success btn-add" type="button"
+                                                       onclick="javascript:window.location.href='/alarm/add'">
+                                                        添加报警策略
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <button class="btn btn-primary nextBtn btn-lg pull-right" type="submit"
+                                            value="完成" id="saveBtn" th:if="${addGroupForm.id== null}">添加
+                                    </button>
+                                    <button class="btn btn-primary nextBtn btn-lg pull-right" type="submit"
+                                            value="完成" id="saveBtn" th:if="${addGroupForm.id != null}">修改
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

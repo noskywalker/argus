@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="userTraceConfigMapper" >
+
+    <resultMap id="BaseResultMap" type="com.monitor.argus.bean.usertrace.UserTraceConfigEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="node_url" property="nodeUrl" jdbcType="VARCHAR"/>
+        <result column="node_name" property="nodeName" jdbcType="VARCHAR"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,node_url,node_name,create_date
+    </sql>
+
+    <select id="getAllUsertraceConfig" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_argus_usertrace_node
+    </select>
+
+    <delete id="clearUserTraceUrlConfig" parameterType="map">
+        TRUNCATE t_argus_usertrace_node
+    </delete>
+
+    <insert id="insertUserTraceConfigBatch" parameterType="map">
+        insert into t_argus_usertrace_node
+        (id,node_url,node_name,create_date)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id},#{item.nodeUrl},#{item.nodeName},now())
+        </foreach>
+    </insert>
+
+</mapper>

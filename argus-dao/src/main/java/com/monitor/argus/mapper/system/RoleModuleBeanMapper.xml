@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="roleModuleBeanMapper" >
+  <resultMap id="BaseResultMap" type="com.monitor.argus.bean.system.RoleModuleBean" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="ROLE_ID" property="roleId" jdbcType="VARCHAR" />
+    <result column="MODULE_ID" property="moduleId" jdbcType="INTEGER" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="CREATOR_ID" property="creatorId" jdbcType="VARCHAR" />
+    <result column="OPERATOR_ID" property="operatorId" jdbcType="VARCHAR" />
+    <result column="MEMO" property="memo" jdbcType="VARCHAR" />
+    <result column="REMARK1" property="remark1" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, ROLE_ID, MODULE_ID, CREATE_TIME, UPDATE_TIME, CREATOR_ID, OPERATOR_ID, MEMO, 
+    REMARK1, STATUS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from ts_role_module
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from ts_role_module
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.monitor.argus.bean.system.RoleModuleBean" >
+    insert into ts_role_module (ID, ROLE_ID, MODULE_ID, 
+      CREATE_TIME, UPDATE_TIME, CREATOR_ID, 
+      OPERATOR_ID, MEMO, REMARK1, 
+      STATUS)
+    values (#{id,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR}, #{moduleId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{creatorId,jdbcType=VARCHAR}, 
+      #{operatorId,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR}, #{remark1,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.monitor.argus.bean.system.RoleModuleBean" >
+    insert into ts_role_module
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="roleId != null" >
+        ROLE_ID,
+      </if>
+      <if test="moduleId != null" >
+        MODULE_ID,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+      <if test="creatorId != null" >
+        CREATOR_ID,
+      </if>
+      <if test="operatorId != null" >
+        OPERATOR_ID,
+      </if>
+      <if test="memo != null" >
+        MEMO,
+      </if>
+      <if test="remark1 != null" >
+        REMARK1,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null" >
+        #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleId != null" >
+        #{moduleId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorId != null" >
+        #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorId != null" >
+        #{operatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="remark1 != null" >
+        #{remark1,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.monitor.argus.bean.system.RoleModuleBean" >
+    update ts_role_module
+    <set >
+      <if test="roleId != null" >
+        ROLE_ID = #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleId != null" >
+        MODULE_ID = #{moduleId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorId != null" >
+        CREATOR_ID = #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorId != null" >
+        OPERATOR_ID = #{operatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null" >
+        MEMO = #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="remark1 != null" >
+        REMARK1 = #{remark1,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.monitor.argus.bean.system.RoleModuleBean" >
+    update ts_role_module
+    set ROLE_ID = #{roleId,jdbcType=VARCHAR},
+      MODULE_ID = #{moduleId,jdbcType=INTEGER},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      CREATOR_ID = #{creatorId,jdbcType=VARCHAR},
+      OPERATOR_ID = #{operatorId,jdbcType=VARCHAR},
+      MEMO = #{memo,jdbcType=VARCHAR},
+      REMARK1 = #{remark1,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <sql id="getCondition">
+		<if test="id != null"> rm.ID = #{id,jdbcType=VARCHAR}</if>
+		<if test="roleId != null"> and rm.ROLE_ID = #{roleId,jdbcType=VARCHAR}</if>
+		<if test="moduleId != null"> and rm.MODULE_ID = #{moduleId,jdbcType=INTEGER}</if>
+		<if test="createTime != null"> and rm.CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}</if>
+		<if test="updateTime != null"> and rm.UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}</if>
+		<if test="creatorId != null"> and rm.CREATOR_ID = #{creatorId,jdbcType=VARCHAR}</if>
+		<if test="operatorId != null"> and rm.OPERATOR_ID = #{operatorId,jdbcType=VARCHAR}</if>
+		<if test="memo != null"> and rm.MEMO = #{memo,jdbcType=VARCHAR}</if>
+		<if test="remark1 != null"> and rm.REMARK1 = #{remark1,jdbcType=VARCHAR}</if>
+		<if test="status != null"> and rm.STATUS = #{status,jdbcType=INTEGER}</if>
+	</sql>
+	
+	<!-- 查询列表 -->
+	<select id="getRoleModuleBean" resultMap="BaseResultMap"
+		parameterType="com.monitor.argus.bean.system.RoleModuleBean">
+		select
+		<include refid="Base_Column_List" />
+		from ts_role_module rm
+		<where>
+			<include refid="getCondition" />
+		</where>
+	</select>
+  
+  <!-- 查询列表 -->
+	<select id="getRoleModuleBeanList" resultMap="BaseResultMap"
+		parameterType="com.monitor.argus.bean.system.RoleModuleBean">
+		select
+		<include refid="Base_Column_List" />
+		from ts_role_module rm
+		<where>
+			<include refid="getCondition" />
+		</where>
+		<if test="sort != null and sort != '' ">
+			order by ${sort} ${order}
+		</if>
+		<if test="rows!=null and rows != 0">
+			limit #{pageStart},#{rows}
+		</if>
+	</select>
+	
+	<!-- 查询列表记录数 -->
+	<select id="getRoleModuleBeanListCount" resultType="java.lang.Long"
+		parameterType="com.monitor.argus.bean.system.RoleModuleBean">
+		select count(0) from ts_role_module rm
+		<where>
+			<include refid="getCondition" />
+		</where>
+	</select>
+</mapper>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorator="layout/alarmFullPageLayout">
+<body>
+<div layout:fragment="content">
+    <div id="dialog" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog"
+         aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="addAlarmStrategyDialog">通知</h4>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button id="diaglogOK" class="btn btn-primary" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header" th:if="${addAlarmStrategyForm.id == null}">添加报警策略</h1>
+                <h1 class="page-header" th:if="${addAlarmStrategyForm.id != null}">编辑报警策略</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container">
+                <form role="form" id="addAlarmStrategyForm" action="#" th:action="@{/alarm/add}" method="post"
+                      th:object="${addAlarmStrategyForm}">
+                    <div class="col-xs-12">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="hidden" th:field="*{id}" id="hid"/>
+                                <label class="control-label">报警策略名称</label>
+                                <input maxlength="100" type="text" required="required" class="form-control"
+                                       placeholder="报警策略名称" th:field="*{alarmName}"/>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">报警方式</label>
+                                <select class="form-control" th:field="*{alarmType}">
+                                    <option value="1">邮件</option>
+                                    <option value="2">短信</option>
+                                    <option value="3">微信</option>
+                                </select>
+                            </div>
+                            <div class="control-group" id="fields">
+                                <label class="control-label">报警策略</label>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1"
+                                               checked="checked"/>
+                                        每次满足条件都报警
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label class="form-inline">
+                                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2"/>
+                                        每 <input type="text" class="form-control"/> 秒内有<input
+                                            type="text" class="form-control"/> 次满足才报警
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label class="form-inline">
+                                        <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3"/>
+                                        连续 <input type="text" class="form-control"/> 次满足条件才报警
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label class="form-inline">
+                                        <input type="radio" name="optionsRadios" id="optionsRadios4" value="option3"/>
+                                        超过最大连续报警次数 <input type="text" class="form-control"/> (次)后的提醒时间间隔为 <input
+                                            type="text" class="form-control"/> 分钟
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">波动预警</label>
+                                <div class="checkbox form-inline">
+                                    <label>
+                                        <input type="checkbox"/> 每 <input type="text" class="form-control"/> 秒有 <input
+                                            type="text" class="form-control"/> 次满足条件就发送报警
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">采集超时报警策略</label>
+                                <div class="checkbox form-inline">
+                                    <label>
+                                        <input type="checkbox"/> 连续 <input type="text" class="form-control"/> 满足条件才报警
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">报警覆盖率</label>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="alarmRate" id="alarmRate1" value="option1"
+                                               checked="checked"/>
+                                        每个机器异常都报警
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label class="form-inline">
+                                        <input type="radio" name="alarmRate" id="alarmRate2" value="option2"/>
+                                        异常机器比例达到 <input type="text" class="form-control"/> %才报警
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">接收人</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">邮件</div>
+                                    <input type="text" class="form-control" id="email"
+                                           placeholder="邮箱"/>
+
+                                    <div class="input-group-addon">短信</div>
+                                    <input type="text" class="form-control" id="message"
+                                           placeholder="短信"/>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="control-label">短信过滤设置</label>
+                                <div class="radio">
+                                    <label class="form-inline">
+                                        <input type="radio" name="filterMessage" id="filterMessage1" value="option2"/>
+                                        不单独设置短信过滤
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label class="form-inline">
+                                        <input type="radio" name="filterMessage" id="filterMessage2" value="option3"/>
+                                        异常机器比例达到 <input type="text" class="form-control"/> 才短信报警
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label class="form-inline">
+                                        <input type="radio" name="filterMessage" id="filterMessage3" value="option3"/>
+                                        异常机器数达到 <input type="text" class="form-control"/> 个才短信报警 <input
+                                            type="text" class="form-control"/> 分钟
+                                    </label>
+                                </div>
+                            </div>
+
+                            <br/>
+                            <div class="form-group">
+                                <label class="control-label">报警优先级</label>
+                                <select class="form-control">
+                                    <option value="1">ERROR</option>
+                                    <option value="2">WARNING</option>
+                                    <option value="3">INFO</option>
+                                </select>
+                            </div>
+
+                            <button class="btn btn-primary nextBtn btn-lg pull-right" type="submit" id="saveBtn"
+                                    data-loading-text="Loading...">保存
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

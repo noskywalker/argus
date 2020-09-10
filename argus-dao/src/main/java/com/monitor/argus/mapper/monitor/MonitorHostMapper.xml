@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="monitorHostMapper" >
+  <resultMap id="BaseResultMap" type="com.monitor.argus.bean.monitor.MonitorHostEntity" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="SYSTEM_ID" property="systemId" jdbcType="VARCHAR" />
+    <result column="HOST_NAME" property="hostName" jdbcType="VARCHAR" />
+    <result column="IP" property="ip" jdbcType="VARCHAR" />
+    <result column="OS" property="os" jdbcType="VARCHAR" />
+    <result column="DETAIL" property="detail" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, SYSTEM_ID, HOST_NAME, IP, OS, DETAIL
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from t_monitor_host
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAllHosts" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from t_monitor_host
+   </select>
+  <insert id="insert" parameterType="com.monitor.argus.bean.monitor.MonitorHostEntity" >
+    replace into t_monitor_host (ID, SYSTEM_ID,
+      HOST_NAME, IP, OS, DETAIL
+      )
+    values (#{id,jdbcType=VARCHAR}, #{systemId,jdbcType=VARCHAR},
+      #{hostName,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR},
+      #{os,jdbcType=VARCHAR}, #{detail,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <select id="getHostsByMonitorSystemId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List"/>
+    from t_monitor_host
+    where SYSTEM_ID = #{systemId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="getHostIdsByMonitorSystemId" resultType="java.lang.String" parameterType="java.lang.String">
+    select
+    id from t_monitor_host
+    where SYSTEM_ID = #{systemId,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteMonitorHostBySystemId" parameterType="java.lang.String">
+    delete from t_monitor_host
+    where SYSTEM_ID = #{systemId,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteMonitorHostById" parameterType="java.lang.String">
+    delete from t_monitor_host
+    where ID = #{ID,jdbcType=VARCHAR}
+  </delete>
+
+</mapper>

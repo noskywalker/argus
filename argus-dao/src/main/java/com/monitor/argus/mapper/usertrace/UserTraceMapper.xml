@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="userTraceMapper" >
+
+    <resultMap id="BaseResultMap" type="com.monitor.argus.bean.usertrace.UserTraceEntity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="user_trace" property="userTrace" jdbcType="VARCHAR"/>
+        <result column="counts" property="count" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap1" type="com.monitor.argus.bean.usertrace.UserTraceGroupEntity">
+        <result column="user_trace" property="userTrace" jdbcType="VARCHAR"/>
+        <result column="tract_sum" property="count" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_trace,counts,create_time
+    </sql>
+
+    <insert id="insertBatch" parameterType="com.monitor.argus.bean.usertrace.UserTraceEntity" >
+        replace into t_argus_usertrace_result (user_trace, counts, create_time)
+        values (#{userTrace,jdbcType=VARCHAR}, #{count,jdbcType=INTEGER}, now())
+    </insert>
+
+    <select id="getAllUsertrace" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_argus_usertrace_result
+        order by create_time desc
+    </select>
+
+    <delete id="deleteUserTraceData" parameterType="map">
+        delete from t_argus_usertrace_result
+        <where>
+            <if test="endDate != null and endDate.length() > 0">
+                create_time &lt;= #{endDate}
+            </if>
+        </where>
+    </delete>
+
+    <select id="usertraceHzByDay" resultMap="BaseResultMap1" parameterType="string">
+        select user_trace,sum(counts) tract_sum
+        from t_argus_usertrace_result
+        where create_time >= #{searchTime} and create_time &lt; Date_add(#{searchTime},INTERVAL 1 day)
+        group by user_trace order by sum(counts) DESC
+    </select>
+
+    <delete id="deleteAllUsertrace">
+        delete from t_argus_usertrace_result
+    </delete>
+
+</mapper>

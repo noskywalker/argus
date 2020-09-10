@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorator="layout/interCollectFullLayout">
+<head>
+    <script type="text/javascript">
+
+    </script>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <!-- Navigation -->
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header"> 接口汇总查询</h1>
+            </div>
+        </div>
+
+        <br/>
+        <div class="row" style="font-size:16px;">
+            <div class="col-md-2">所属接口：</div>
+            <div class="col-md-3">
+                <select id="nodeKeySelect" th:if="!${#lists.isEmpty(nodeEntityList)}"
+                        style="height:29px;border-radius:3px;border:1px solid #DDDDDD;">
+                    <option th:each="node : ${nodeEntityList}"
+                            th:value="${node.nodeKey}"
+                            th:text="${node.nodeName}"
+                            th:selected="${nodeKey eq node.nodeKey}"
+                    >
+                    </option>
+                </select>
+            </div>
+        </div>
+        <br/>
+        <div class="row" style="font-size:16px;">
+            <div class="col-md-2">起止时间：</div>
+            <div class="col-md-3">
+                <div class="input-group date form_date col-md-10" data-date="" data-date-format="yyyy-mm-dd"
+                     data-link-field="dtp_input1" data-link-format="yyyy-mm-dd">
+                    <input id="dtp_input1" class="form-control" size="10" type="text" placeholder="请选择开始时间" value=""
+                           readonly="readonly"/>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+            </div>
+            <div class="col-md-1">~</div>
+            <div class="col-md-3">
+
+                <div class="input-group date form_date col-md-10" data-date="" data-date-format="yyyy-mm-dd"
+                     data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                    <input id="dtp_input2" class="form-control" size="10" type="text" placeholder="请选择结束时间" value=""
+                           readonly="readonly"/>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+
+            </div>
+            <div class="col-md-1">
+                <input type="hidden" th:value="${hanId}" id="hanIdV" />
+                <button class="btn btn-primary" id="avgClick" onclick="avgClickBtn();">查&nbsp;&nbsp;询</button>
+            </div>
+
+        </div>
+        <br/>
+        <br/>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-area-chart fa-fw"></i>接口响应时长折线图(周期:天 单位:ms)
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="flot-chart">
+                            <div class="flot-chart-content" id="line-chart-collect"></div>
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-area-chart fa-fw"></i>接口调用次数折线图(周期:天 单位:次)
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="flot-chart">
+                            <div class="flot-chart-content" id="chart-collect-count"></div>
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+</body>
+</html>

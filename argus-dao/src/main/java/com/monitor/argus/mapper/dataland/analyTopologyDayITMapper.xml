@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="analyTopologyDayITMapper">
+    <resultMap id="BaseResultMap" type="com.monitor.argus.bean.dataland.AnalyTopologyHourITEntity">
+        <id column="ID" property="id" jdbcType="INTEGER"/>
+        <result column="IT_COUNT" property="count" jdbcType="INTEGER"/>
+        <result column="ALL_TIME" property="alltime" jdbcType="INTEGER"/>
+        <result column="PER_TIME" property="pertime" jdbcType="DOUBLE"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="NODE_KEY" property="nodeKey" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, IT_COUNT, ALL_TIME, PER_TIME, CREATE_DATE, NODE_KEY
+    </sql>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_topo_analy_hourit_data order by CREATE_DATE DESC
+    </select>
+
+    <insert id="insert" parameterType="com.monitor.argus.bean.dataland.AnalyTopologyHourITEntity">
+        replace into t_topo_analy_hourit_data (IT_COUNT, ALL_TIME, PER_TIME, CREATE_DATE, NODE_KEY)
+        values (#{count,jdbcType=INTEGER}, #{alltime,jdbcType=INTEGER}, #{pertime,jdbcType=DOUBLE}, #{createDate,jdbcType=TIMESTAMP}, #{nodeKey,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <delete id="delByDate" parameterType="map">
+        delete from t_topo_analy_hourit_data
+        <where>
+            <if test="endDate != null and endDate.length() > 0">
+                CREATE_DATE &lt;= #{endDate}
+            </if>
+        </where>
+    </delete>
+
+</mapper>

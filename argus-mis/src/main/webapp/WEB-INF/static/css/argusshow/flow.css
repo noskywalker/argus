@@ -1,0 +1,303 @@
+@charset "UTF-8";
+/*清除html的默认样式*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	font-family: "Microsoft YaHei", STHeiti, "宋体", sans-serif;
+	color: #333;
+}
+/*HTML5 display-role reset for older browsers*/
+article, aside, details, figcaption, figure,
+footer, header, menu, nav, section{
+	display: block;
+}
+ol, ul{
+	list-style: none;
+}
+blockquote, q{
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after{
+	content: '';
+	content: none;
+}
+table{
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+a{
+	text-decoration: none;
+}
+input[type=checkbox], ol, ul, input, button{
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+/*html{min-height: 100%;background:-webkit-linear-gradient(top,#f93944 30%, #fc7d29);}*/
+/*html, body{font-family:Helvetica, sans-serif;color: #333;-webkit-user-select:none;width: 100%;}
+日志流量*/
+html{
+	width: 100%;
+	height: 100%;
+}
+.top{
+	width: 100%;
+	height: 170px;
+	background: -webkit-linear-gradient(left, rgb(249,82,66) 50%, rgb(247, 45, 93));
+}
+.foot{
+	width: 100%;
+	height: 500px;
+}
+.logsAndFlowControl{
+	display: inline-block;
+	margin: 10px 0 0 20px;
+	font-size: 40px;
+	color: #fff;
+	padding-bottom: 0px;
+	vertical-align: baseline;
+}
+.logsAndFlowUnit{
+	color: #fff;
+	margin-left: 4px;
+	font-size: 20px;
+	line-height: 100%;
+}
+.timeDate{
+	float: right;
+	display: inline-block;
+	margin: 7px 10px 0 0;
+	color: rgb(250,136,159);
+	font-size: 20px;
+}
+.timeHour{
+	float: right;
+	width: 120px;
+	margin-top: 7px;
+	display: inline-block;
+	font-size: 20px;
+	color: rgb(250, 136, 159);
+	font-family: "宋体";
+}
+.logsTotalWord{
+	display: inline-block;
+	font-size: 15px;
+	margin: 30px 0 0 25px;
+	color: rgb(253,191,186);
+}
+.logsTotalNum{
+	display: inline-block;
+	font-size: 15px;
+	margin: 30px 0 0 150px;
+	color: rgb(253,191,186);
+}
+.logsWord{
+	display: inline-block;
+	font-size: 25px;
+	width: 200px;
+	padding: 10px 0 0 25px;
+	color: rgb(254,215,212);
+}
+.logsNum{
+	display: inline-block;
+	font-size: 25px;
+	padding-left: 37px;
+	color: rgb(254,215,212);
+}
+.sign{
+	float: right;
+	color: #fff;
+	font-size: 15px;
+	margin: 20px 10px 0 0; 
+	padding: 0;
+}
+.bottomLogsAndFlow{
+	float: right;
+	display: inline-block;
+	font-size: 15px;
+	margin: 20px 10px 0 0;
+	color: rgb(110,110,110);
+}
+.bottomOthers{
+	color: rgb(210,210,210);
+}
+
+/*流量监控css*/
+.flowTop{
+	width: 100%;
+	height: 170px;
+	background: -webkit-linear-gradient(left, rgb(249, 172, 27) 50%, rgb(255, 122, 27));
+}
+.flowTimeDate{
+	float: right;
+	display: inline-block;
+	margin: 7px 10px 0 0;
+	color: rgb(255,173,128);
+	font-size: 20px;
+}
+.flowTimeHour{
+	float: right;
+	width: 120px;
+	margin-top: 7px;
+	display: inline-block;
+	font-size: 20px;
+	color: rgb(255,173,128);
+}
+.innerFlowControll{
+	display: inline-block;
+	font-size: 40px;
+	margin: 55px 0 0 20px;
+	color: #fff;
+}
+.innerFlowControllUnit{
+	font-size: 20px;
+	color: #fff;
+}
+.flowFoot{
+	margin-top: 20px;
+	width: 100%;
+	height: 500px;
+}
+.flowBottom{
+	float: right;
+	display: inline-block;
+	font-size: 15px;
+	margin: 20px 10px 0 0;
+	color: rgb(210,210,210);
+}
+.flowBottomFlow{
+	color: rgb(110,110,110);
+}
+
+/*报警趋势*/
+.warnTop{
+	width: 100%;
+	height: 170px;
+	background: -webkit-linear-gradient(left, rgb(40, 187, 177) 35%, rgb(69, 105, 214));
+}
+.warnTimeHour{
+	float: right;
+	width: 120px;
+	margin-top: 7px;
+	display: inline-block;
+	font-size: 20px;
+	color: rgb(145,166,230);
+}
+.warnTimeDate{
+	float: right;
+	display: inline-block;
+	margin: 7px 10px 0 0;
+	color: rgb(145,166,230);
+	font-size: 20px;
+}
+.warnFoot{
+	margin-top: 20px;
+	width: 100%;
+	height: 500px;
+}
+
+/*pv监控*/
+.pvTop{
+	width: 100%;
+	height: 120px;
+	background: -webkit-linear-gradient(left, rgb(69,105,214) 20%, rgb(177,23,253));
+}
+.pvInnerControll{
+	display: inline-block;
+	font-size: 40px;
+	color: #fff;
+	margin: 30px 0 0 20px;
+}
+.pvSign{
+	float: right;
+	color: #fff;
+	font-size: 15px;
+	margin: 1px 10px 0 0; 
+	padding: 0;
+}
+span.pvTimeColor{
+	color: rgb(206,177,255);
+}
+.pvFoot{
+	width: 100%;
+	height: 300px;
+}
+.appFoot{
+	margin-top: 10px;
+	width: 100%;
+	height: 300px;
+}
+.floated{
+	position: absolute;
+	left: 30%;
+	width: 40%;
+	height: 100px;
+	background-color: rgb(193,25,32);
+	opacity: 1;
+	z-index: 1000;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	vertical-align: middle;
+	display: none;
+}
+.floatedImg{
+	float: left;
+	position: relative;
+	left: 21%;
+	top: 25%;
+}
+.floatWord1{
+	float: left;
+	position: relative;
+	left: 24%;
+	top: 23%;
+	font-size: 20px;
+	color: #fff;
+}
+.floatWord2{
+	float: left;
+	position: relative;
+	left: 1%;
+	top: 48%;
+	font-size: 10px;
+	color: rgb(231,178,183);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

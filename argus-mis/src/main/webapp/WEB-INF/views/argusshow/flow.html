@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<title>日志流量监控</title>
+	<link rel="stylesheet" href="../../static/css/argusshow/flow.css" />
+</head>
+<body>
+<div id="floated" class="floated">
+	<img src="../../static/css/images/argusshowWarning.png" alt="" width="10%" height="40%" class="floatedImg" />
+	<span id="floatWord1" class="floatWord1">异常报警发生</span>
+	<span id="floatWord2" class="floatWord2">理财app后端渠道用户注册(14:23:26)</span>
+</div>
+<div id="logsAndFlow">
+	<div class="top" id="top">
+		<span class="logsAndFlowControl">日志流量监控<span class="logsAndFlowUnit">(KB/S)</span></span>
+		<span id="timeHour" class="timeHour"></span>
+		<span id="timeDate" class="timeDate"></span>
+		<div>
+			<span class="logsTotalWord">日志总量</span>
+			<span class="logsTotalNum">日志条数</span>
+			<div>
+				<span id="logsWord" class="logsWord">28,730.38GB</span>
+				<span id="logsNum" class="logsNum">2亿2928万8461</span>
+				<span class="sign">Argus监控报警系统</span>
+			</div>
+		</div>
+	</div>
+	<div id="foot" class="foot">
+		
+	</div>
+	<div id="bottom" class="bottom">
+		<span class="bottomLogsAndFlow">日志流量<span class="bottomOthers">/流量/监控报警/PV</span></span>
+	</div>
+</div>
+
+<!-- 流量监控页面 -->
+<div id="flowControll">
+	<div id="flowTop" class="flowTop">
+		<span id="flowTimeHour" class="flowTimeHour"></span>
+		<span id="flowTimeDate" class="flowTimeDate"></span>
+		<div>
+			<span class="innerFlowControll">流量监控<span class="innerFlowControllUnit">（单位：MB)</span></span>
+		</div>
+		<span class="sign">Argus监控报警系统</span>
+	</div>
+	<div id="flowFoot" class="flowFoot">
+		
+	</div>
+	<div id="bottom" class="bottom">
+		<span class="flowBottom">日志流量/<span class="flowBottomFlow">流量</span>/监控报警/PV</span>
+	</div>
+</div>
+
+<!-- 报警趋势 -->
+<div id="warnTends">
+	<div id="warnTop" class="warnTop">
+		<span id="warnTimeHour" class="warnTimeHour"></span>
+		<span id="warnTimeDate" class="warnTimeDate"></span>
+		<div>
+			<span class="innerFlowControll">监控报警趋势<span class="innerFlowControllUnit">（次／天)</span></span>
+		</div>
+		<span class="sign">Argus监控报警系统</span>
+	</div>
+	<div id="warnFoot" class="warnFoot">
+		
+	</div>
+	<div id="bottom" class="bottom">
+		<span class="flowBottom">日志流量/流量/<span class="flowBottomFlow">监控报警</span>/PV</span>
+	</div>
+</div>
+
+<!-- PV监控 -->
+<div id="pvControll">
+	<div id="pvTop" class="pvTop">
+		<span id="pvTimeHour" class="warnTimeHour pvTimeColor"></span>
+		<span id="pvTimeDate" class="warnTimeDate pvTimeColor"></span>
+		<div>
+			<span class="pvInnerControll">PV监控</span>
+		</div>
+		<span class="pvSign">Argus监控报警系统</span>
+	</div>
+	<div id="pvFoot" class="pvFoot">
+		
+	</div>
+	<div id="appFoot" class="appFoot">
+		
+	</div>
+	<div id="bottom" class="bottom">
+		<span class="flowBottom">日志流量/流量/监控报警/<span class="flowBottomFlow">PV</span></span>
+	</div>
+</div>
+</body>
+	<script type="text/javascript" src="../../static/js/jquery/jquery.js"></script>
+	<script type="text/javascript" src="../../static/js/echarts/echarts.js"></script>
+	<script type="text/javascript" src="../../static/js/argusshow/logs.js"></script>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+

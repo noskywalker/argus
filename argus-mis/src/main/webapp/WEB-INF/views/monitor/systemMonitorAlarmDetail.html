@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorator="layout/sysflowFullLayout">
+<head>
+    <script type="text/javascript">
+
+    </script>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <!-- Navigation -->
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header" th:text="'系统监控报警明细排行-' + ${systemName}" ></h1>
+            </div>
+        </div>
+
+        <br/>
+        <div class="row" style="font-size:16px;">
+            <div class="col-md-2">所属系统：</div>
+            <div class="col-md-3">
+                <select id="systemId" th:if="!${#lists.isEmpty(systemList)}"
+                        style="height:29px;border-radius:3px;border:1px solid #DDDDDD;">
+                    <option th:each="system : ${systemList}"
+                            th:value="${system.id}"
+                            th:text="${system.systemName}"
+                            th:selected="${systemId eq system.id}"
+                    >
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <input type="hidden" th:value="${hanIdg}" id="hanIdV" />
+                <button class="btn btn-primary"
+                        onclick="javascript:window.location.href='/statisticsmonitor/monitoralarmDetailList?systemId='+document.getElementById('systemId').value+'&amp;hanId='+document.getElementById('hanIdV').value">
+                    查&nbsp;&nbsp;询
+                </button>
+            </div>
+        </div>
+        <br/>
+        <br/>
+        <div class="row ">
+            <div class="col-xs-5">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-area-chart fa-fw"></i>监控次数排行
+                    </div>
+                    <!-- /.panel-heading -->
+
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <table class="table table-hover table-bordered" id="dataTables-monitor">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>监控名称</th>
+                                <th>次数</th>
+                                <th>占比</th>
+                            </tr>
+                            </thead>
+                            <tbody id="monitorTbody">
+                            <tr th:each="result : ${monitorList}">
+                                <td th:text="${result.num}">id</td>
+                                <td th:text="${result.name}">监控名称</td>
+                                <td th:text="${result.count}">次数</td>
+                                <td th:text="${result.percent}">占比</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- /.panel -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+
+
+            <div class="col-xs-5">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-area-chart fa-fw"></i>报警次数排行
+                    </div>
+
+                    <div class="panel-body">
+                        <table class="table table-hover table-bordered" id="dataTables-alarm">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>报警名称</th>
+                                <th>次数</th>
+                                <th>占比</th>
+                            </tr>
+                            </thead>
+                            <tbody id="alarmTbody">
+                            <tr th:each="result : ${alarmList}">
+                                <td th:text="${result.num}">id</td>
+                                <td th:text="${result.name}">报警名称</td>
+                                <td th:text="${result.count}">次数</td>
+                                <td th:text="${result.percent}">占比</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+</body>
+</html>

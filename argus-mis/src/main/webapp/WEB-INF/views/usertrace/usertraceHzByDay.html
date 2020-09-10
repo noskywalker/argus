@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorator="layout/usertraceHzByDayFullPageLayout">
+<body>
+<div layout:fragment="content">
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">用户轨迹汇总(按天)</h1>
+                <input type="hidden" th:value="${ylsysid}" id="ylsystemId"/>
+                <input type="hidden" th:value="${hanId}" id="hanIdV" />
+                <input type="hidden" th:value="${searchTime}" id="searchTime" />
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        用户轨迹汇总(按天)，日期：<span th:text="${searchTime}" />&nbsp;&nbsp;总数：<span th:text="${searchCount}" />
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="dataTable_wrapper">
+                            <div class="row" style="font-size:16px;">
+                                <div class="col-md-2">查询日期：</div>
+                                <div class="col-md-3">
+                                    <div class="input-group date form_date col-md-10" data-date="" data-date-format="yyyy-mm-dd"
+                                         data-link-field="dtp_input1" data-link-format="yyyy-mm-dd">
+                                        <input id="dtp_input1" class="form-control" size="10" type="text" placeholder="请选择查询日期" value=""
+                                               readonly="readonly"/>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-primary" onclick="onQueryUsertraceHz();">查&nbsp;&nbsp;询
+                                    </button>
+                                    &nbsp;&nbsp;
+                                    <button type="button" class="btn btn-info"
+                                            onclick="exportUsertraceHz();">导&nbsp;&nbsp;出
+                                    </button>
+                                    &nbsp;&nbsp;
+                                    <button type="button" class="btn btn-info"
+                                            onclick="clearUsertraceHz();">清&nbsp;&nbsp;理
+                                    </button>
+                                </div>
+                            </div>
+                            <table class="table table-striped table-bordered table-hover" id="dataTables-group">
+                                <thead>
+                                <tr>
+                                    <th>次数</th>
+                                    <th>轨迹</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="result : ${searchResults}">
+                                    <td th:text="${result.count}">次数</td>
+                                    <td th:text="${result.userTrace}">用户轨迹</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+    </div>
+</div>
+</body>
+</html>

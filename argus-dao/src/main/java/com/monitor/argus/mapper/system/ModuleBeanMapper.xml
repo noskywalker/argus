@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="moduleBeanMapper" >
+  <resultMap id="BaseResultMap" type="com.monitor.argus.bean.system.ModuleBean" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="MODULE_NAME" property="moduleName" jdbcType="VARCHAR" />
+    <result column="MODULE_URL" property="moduleUrl" jdbcType="VARCHAR" />
+    <result column="PARENT_ID" property="parentId" jdbcType="INTEGER" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="MODULE_SORT" property="moduleSort" jdbcType="INTEGER" />
+    <result column="CREATOR_ID" property="creatorId" jdbcType="VARCHAR" />
+    <result column="OPERATOR_ID" property="operatorId" jdbcType="VARCHAR" />
+    <result column="MEMO" property="memo" jdbcType="VARCHAR" />
+    <result column="REMARK1" property="remark1" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, MODULE_NAME, MODULE_URL, PARENT_ID, CREATE_TIME, UPDATE_TIME, MODULE_SORT, CREATOR_ID, 
+    OPERATOR_ID, MEMO, REMARK1, STATUS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from ts_module
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ts_module
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.monitor.argus.bean.system.ModuleBean" >
+    insert into ts_module (ID, MODULE_NAME, MODULE_URL, 
+      PARENT_ID, CREATE_TIME, UPDATE_TIME, 
+      MODULE_SORT, CREATOR_ID, OPERATOR_ID, 
+      MEMO, REMARK1, STATUS
+      )
+    values (#{id,jdbcType=INTEGER}, #{moduleName,jdbcType=VARCHAR}, #{moduleUrl,jdbcType=VARCHAR}, 
+      #{parentId,jdbcType=INTEGER}, now(), #{updateTime,jdbcType=TIMESTAMP}, 
+      #{moduleSort,jdbcType=INTEGER}, #{creatorId,jdbcType=VARCHAR}, #{operatorId,jdbcType=VARCHAR}, 
+      #{memo,jdbcType=VARCHAR}, #{remark1,jdbcType=VARCHAR},1
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.monitor.argus.bean.system.ModuleBean" >
+    insert into ts_module
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="moduleName != null" >
+        MODULE_NAME,
+      </if>
+      <if test="moduleUrl != null" >
+        MODULE_URL,
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID,
+      </if>
+        CREATE_TIME,
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+      <if test="moduleSort != null" >
+        MODULE_SORT,
+      </if>
+      <if test="creatorId != null" >
+        CREATOR_ID,
+      </if>
+      <if test="operatorId != null" >
+        OPERATOR_ID,
+      </if>
+      <if test="memo != null" >
+        MEMO,
+      </if>
+      <if test="remark1 != null" >
+        REMARK1,
+      </if>
+        STATUS
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="moduleName != null" >
+        #{moduleName,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleUrl != null" >
+        #{moduleUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=INTEGER},
+      </if>
+        now(),
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="moduleSort != null" >
+        #{moduleSort,jdbcType=INTEGER},
+      </if>
+      <if test="creatorId != null" >
+        #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorId != null" >
+        #{operatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="remark1 != null" >
+        #{remark1,jdbcType=VARCHAR},
+      </if>
+        1
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.monitor.argus.bean.system.ModuleBean" >
+    update ts_module
+    <set >
+      <if test="moduleName != null" >
+        MODULE_NAME = #{moduleName,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleUrl != null" >
+        MODULE_URL = #{moduleUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="moduleSort != null" >
+        MODULE_SORT = #{moduleSort,jdbcType=INTEGER},
+      </if>
+      <if test="creatorId != null" >
+        CREATOR_ID = #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorId != null" >
+        OPERATOR_ID = #{operatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null" >
+        MEMO = #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="remark1 != null" >
+        REMARK1 = #{remark1,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=INTEGER},
+      </if>
+      UPDATE_TIME = now()
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.monitor.argus.bean.system.ModuleBean" >
+    update ts_module
+    set MODULE_NAME = #{moduleName,jdbcType=VARCHAR},
+      MODULE_URL = #{moduleUrl,jdbcType=VARCHAR},
+      PARENT_ID = #{parentId,jdbcType=INTEGER},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = now(),
+      MODULE_SORT = #{moduleSort,jdbcType=INTEGER},
+      CREATOR_ID = #{creatorId,jdbcType=VARCHAR},
+      OPERATOR_ID = #{operatorId,jdbcType=VARCHAR},
+      MEMO = #{memo,jdbcType=VARCHAR},
+      REMARK1 = #{remark1,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <sql id="getColumn">
+		m.ID as id,
+		m.MODULE_NAME as moduleName,
+		m.MODULE_URL as moduleUrl,
+		m.PARENT_ID as parentId,
+		m.CREATE_TIME as createTime,
+		m.UPDATE_TIME as updateTime,
+		m.MODULE_SORT as moduleSort,
+		m.CREATOR_ID as creatorId,
+		m.OPERATOR_ID as operatorId,
+		m.MEMO as memo,
+		m.REMARK1 as remark1,
+		m.STATUS as status
+	</sql>
+  
+  <sql id="getOneCondition">
+		<if test="id != null"> m.ID = #{id,jdbcType=VARCHAR}</if>
+		<if test="moduleName != null"> and m.MODULE_NAME = #{moduleName,jdbcType=VARCHAR}</if>
+		<if test="moduleUrl != null"> and m.MODULE_URL = #{moduleUrl,jdbcType=VARCHAR}</if>
+		<if test="parentId != null"> and m.PARENT_ID = #{parentId,jdbcType=INTEGER}</if>
+		<if test="createTime != null"> and m.CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}</if>
+		<if test="updateTime != null"> and m.UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}</if>
+		<if test="moduleSort != null"> and m.MODULE_SORT = #{moduleSort,jdbcType=INTEGER}</if>
+		<if test="creatorId != null"> and m.CREATOR_ID = #{creatorId,jdbcType=VARCHAR}</if>
+		<if test="operatorId != null"> and m.OPERATOR_ID = #{operatorId,jdbcType=VARCHAR}</if>
+		<if test="memo != null"> and m.MEMO = #{memo,jdbcType=VARCHAR}</if>
+		<if test="remark1 != null"> and m.REMARK1 = #{remark1,jdbcType=VARCHAR}</if>
+		and m.STATUS = 1
+	</sql>
+	
+	<!-- 查询一个  (author:alex zhang)-->
+	<select id="getModuleBean" resultMap="BaseResultMap"
+		parameterType="com.monitor.argus.bean.system.ModuleBean">
+		select
+		<include refid="getColumn" />
+		from ts_module m
+		<where>
+			<include refid="getOneCondition" />
+		</where>
+	</select>
+	
+	<sql id="getCondition">
+		<if test="id != null and id !='' "> m.ID = #{id,jdbcType=VARCHAR}</if>
+		<if test="moduleName != null and moduleName !='' "> and m.MODULE_NAME like CONCAT ('%',#{moduleName,jdbcType=VARCHAR},'%')</if>
+		<if test="moduleUrl != null and moduleUrl !='' "> and m.MODULE_URL like CONCAT ('%',#{moduleUrl,jdbcType=VARCHAR},'%')</if>
+		<if test="parentId != null"> and m.PARENT_ID = #{parentId,jdbcType=INTEGER}</if>
+		<if test="createTime != null"> and m.CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}</if>
+		<if test="updateTime != null"> and m.UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}</if>
+		<if test="moduleSort != null"> and m.MODULE_SORT = #{moduleSort,jdbcType=INTEGER}</if>
+		<if test="creatorId != null and creatorId !='' "> and m.CREATOR_ID = #{creatorId,jdbcType=VARCHAR}</if>
+		<if test="operatorId != null and operatorId !='' "> and m.OPERATOR_ID = #{operatorId,jdbcType=VARCHAR}</if>
+		<if test="memo != null and memo !='' "> and m.MEMO like CONCAT ('%',#{memo,jdbcType=VARCHAR},'%')</if>
+		<if test="remark1 != null and remark1 !='' "> and m.REMARK1 = #{remark1,jdbcType=VARCHAR}</if>
+		and m.STATUS = 1
+	</sql>
+	
+	
+	<sql id="getListColumn">
+		m.ID as id,
+		m.MODULE_NAME as moduleName,
+		m.MODULE_URL as moduleUrl,
+		m.PARENT_ID as parentId,
+		mp.ID as parentModuleName,
+		m.CREATE_TIME as createTime,
+		m.UPDATE_TIME as updateTime,
+		m.MODULE_SORT as moduleSort,
+		m.CREATOR_ID as creatorId,
+		m.OPERATOR_ID as operatorId,
+		m.MEMO as memo,
+		m.REMARK1 as remark1,
+		m.STATUS as status
+	</sql>
+	
+	<sql id="getListCondition">
+		<if test="id != null and id !='' "> m.ID = #{id,jdbcType=VARCHAR}</if>
+		<if test="moduleName != null and moduleName !='' "> and m.MODULE_NAME like CONCAT ('%',#{moduleName,jdbcType=VARCHAR},'%')</if>
+		<if test="moduleUrl != null and moduleUrl !='' "> and m.MODULE_URL like CONCAT ('%',#{moduleUrl,jdbcType=VARCHAR},'%')</if>
+		<if test="parentId != null"> and m.PARENT_ID = #{parentId,jdbcType=INTEGER}</if>
+		<if test="createTime != null"> and m.CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}</if>
+		<if test="updateTime != null"> and m.UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}</if>
+		<if test="moduleSort != null"> and m.MODULE_SORT = #{moduleSort,jdbcType=INTEGER}</if>
+		<if test="creatorId != null and creatorId !='' "> and m.CREATOR_ID = #{creatorId,jdbcType=VARCHAR}</if>
+		<if test="operatorId != null and operatorId !='' "> and m.OPERATOR_ID = #{operatorId,jdbcType=VARCHAR}</if>
+		<if test="memo != null and memo !='' "> and m.MEMO like CONCAT ('%',#{memo,jdbcType=VARCHAR},'%')</if>
+		<if test="remark1 != null and remark1 !='' "> and m.REMARK1 = #{remark1,jdbcType=VARCHAR}</if>
+		and m.PARENT_ID =mp.ID
+		and m.STATUS = 1
+	</sql>
+	
+  <!-- 查询列表  (author:alex zhang)-->
+	<select id="getModuleBeanList" resultMap="BaseResultMap"
+		parameterType="com.monitor.argus.bean.system.ModuleBean">
+		select
+		<include refid="getListColumn" />
+		from ts_module m,ts_module mp
+		<where>
+			<include refid="getListCondition" />
+		</where>
+		<if test="sort != null and sort != '' ">
+			order by ${sort} ${order}
+		</if>
+		<if test="rows!=null and rows != 0">
+			limit #{pageStart},#{rows}
+		</if>
+	</select>	
+	
+	<!-- 根据角色ID和父模块ID等信息查询模块信息 (author:alex zhang) -->
+	<select id="getRoleSubModuleBeanList" resultMap="BaseResultMap"
+		parameterType="com.monitor.argus.bean.system.RoleModuleBean">
+		select * 
+		from (
+			select m.id as id,
+						 m.module_name as moduleName,
+						 m.MODULE_URL as moduleUrl,
+						 m.parent_id as parentId,
+						 m.module_sort as moduleSort,
+						 m.status as status,
+					(case 
+						when t.roleId is null 
+							then 0 
+						else 1 end) as seted
+			from ts_module m
+			LEFT JOIN (
+				SELECT DISTINCT(rm.module_id) as moduleId ,
+					rm.role_id as roleId 
+				from ts_role_module rm 
+				where rm.status=1
+				and rm.ROLE_ID= #{roleId,jdbcType=VARCHAR}
+			) t
+			on m.id=t.moduleId
+			where m.status=1
+		) tt
+		<where>
+			<!-- 非根模块的所有模块 -->
+			<if test="parentId!=null and parentId==-1">
+				tt.parentId!=0
+			</if>
+			<if test="parentId != null and parentId!=-1">
+				tt.parentId=#{parentId,jdbcType=INTEGER}
+			</if>
+			<!-- 用户是否已经设置权限 -->
+			<if test="seted != null">
+				and tt.seted=#{seted,jdbcType=INTEGER}
+			</if>
+				and tt.status=1
+		</where>
+		ORDER BY tt.moduleSort
+	</select>
+	
+	<!-- 查询列表记录数  (author:alex zhang)-->
+	<select id="getModuleBeanListCount" resultType="java.lang.Long"
+		parameterType="com.monitor.argus.bean.system.ModuleBean">
+		select count(0) from ts_module m
+		<where>
+			<include refid="getCondition" />
+		</where>
+	</select>
+</mapper>

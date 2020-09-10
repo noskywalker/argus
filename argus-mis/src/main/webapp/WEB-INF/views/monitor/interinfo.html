@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorator="layout/interInfoFullLayout">
+<head>
+    <script type="text/javascript">
+
+    </script>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <!-- Navigation -->
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header"> 接口实时查询</h1>
+            </div>
+        </div>
+
+        <br/>
+        <div class="row" style="font-size:16px;">
+            <div class="col-md-2">所属接口：</div>
+            <div class="col-md-3">
+                <select id="nodeKeySelect" th:if="!${#lists.isEmpty(nodeEntityList)}"
+                        style="height:29px;border-radius:3px;border:1px solid #DDDDDD;">
+                    <option th:each="node : ${nodeEntityList}"
+                            th:value="${node.nodeKey}"
+                            th:text="${node.nodeName}"
+                            th:selected="${nodeKey eq node.nodeKey}"
+                    >
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <input type="hidden" th:value="${hanId}" id="hanIdV" />
+                <button class="btn btn-primary"
+                        onclick="javascript:window.location.href='/statisticsmonitor/interinfo?nodeKey='+document.getElementById('nodeKeySelect').value+'&amp;hanId='+document.getElementById('hanIdV').value">
+                    查&nbsp;&nbsp;询
+                </button>
+            </div>
+        </div>
+        <br/>
+        <br/>
+        <div class="row ">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-area-chart fa-fw"></i>最近24小时接口响应时长列表
+                    </div>
+                    <!-- /.panel-heading -->
+
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <table class="table table-hover table-bordered" id="dataTables-monitor">
+                            <thead>
+                            <tr style="font-weight: bolder;background-color: rgb(253,245,154);">
+                                <th>时间</th>
+                                <th>调用次数</th>
+                                <th>平均响应时间(ms)</th>
+                            </tr>
+                            </thead>
+                            <tbody id="interinfoBody">
+                            <tr th:each="result : ${todayList}">
+                                <td th:text="${result.createDateStr}">时间</td>
+                                <td th:text="${result.count}">次数</td>
+                                <td th:text="${result.pertime}">响应时间</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- /.panel -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-area-chart fa-fw"></i>两日同期接口响应时间对比(周期:时 单位:ms)
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="flot-chart">
+                            <div class="flot-chart-content" id="flot-line-chart"></div>
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-area-chart fa-fw"></i>两日同期接口调用次数对比(周期:时 单位:次)
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="flot-chart">
+                            <div class="flot-chart-content" id="line-chart-count"></div>
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+</body>
+</html>

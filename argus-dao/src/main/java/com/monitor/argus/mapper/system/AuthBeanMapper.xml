@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="authBeanMapper">
+    <resultMap id="AuthResultMap" type="com.monitor.argus.bean.system.AuthBean">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="auth_name" property="authName" jdbcType="VARCHAR"/>
+        <result column="parent_id" property="parentId" jdbcType="VARCHAR"/>
+        <result column="parent_name" property="parentName" jdbcType="VARCHAR"/>
+        <result column="auth_type" property="authType" jdbcType="INTEGER"/>
+        <result column="OPERATOR_ID" property="operatorId" jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="enable" property="enable" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Auth_Column_List">
+        id,auth_name,parent_id,parent_name,auth_type,operator_id,create_time,update_time,enable
+    </sql>
+
+    <sql id="getAuthColumn">
+        a.id as id,
+        a.auth_name as authName,
+        a.parent_id as parentId,
+        a.parent_name as parentName,
+        a.auth_type as authType,
+        a.operator_id as operatorId,
+        a.create_time as createTime,
+        a.update_time as updateTime,
+        a.enable as enable
+
+    </sql>
+
+    <select id="selectAuthByPrimaryKey" resultMap="AuthResultMap" parameterType="map">
+        select
+        <include refid="Auth_Column_List"/>
+        from argus.t_argus_system_auth
+        where ID = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insertAuthSelective" parameterType="map">
+        insert into argus.t_argus_system_auth
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="authName != null and authName.length() > 0">
+                auth_name,
+            </if>
+            <if test="parentId != null  and parentId >0">
+                parent_id,
+            </if>
+            <if test="parentName != null and parentName.length() > 0 ">
+                parent_name,
+            </if>
+            <if test="authType != null and authType >= 0">
+                auth_type,
+            </if>
+            <if test="operatorId != null and operatorId >0">
+                operator_id,
+            </if>
+            create_time
+        </trim>
+        <trim prefix=" values(" suffix=")" suffixOverrides=",">
+            <if test="authName != null and authName.length() > 0">
+                #{authName},
+            </if>
+            <if test="parentId != null and parentId >0">
+                #{parentId},
+            </if>
+            <if test="parentName != null and parentName.length() > 0">
+                #{parentName},
+            </if>
+            <if test="authType != null and authType >= 0">
+                #{authType},
+            </if>
+            <if test="operatorId != null and operatorId > 0">
+                #{operatorId},
+            </if>
+            now()
+        </trim>
+    </insert>
+
+
+    <update id="updateAuthByPrimaryKeySelective" parameterType="map">
+        update argus.t_argus_system_auth
+        <set>
+            <if test="authName != null and authName.length() > 0">
+                auth_name = #{authName,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null and parentId >0">
+                parent_id = #{parentId},
+            </if>
+            <if test="parentName != null and parentName.length() > 0">
+                parent_name = #{parentName},
+            </if>
+            <if test="operatorId != null and operatorId >0">
+                OPERATOR_ID = #{operatorId,jdbcType=VARCHAR},
+            </if>
+            <if test="enable != null and enable >= 0">
+                enable = #{enable,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <sql id="getAuthCondition">
+        <if test="id != null and id != '' ">a.ID = #{id,jdbcType=VARCHAR}</if>
+        <if test="authName != null and authName != '' ">and a.auth_name like CONCAT
+            ('%',#{authName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="authType != null and authType >=0 ">and a.auth_type = #{authType}</if>
+        <if test="parentId != null and parentId >-1">and a.parent_id = #{parentId}</if>
+        <if test="enable != null and enable >= 0">and a.enable = #{enable}</if>
+    </sql>
+
+    <!-- 查询权限列表 -->
+    <select id="getAuthBean" resultMap="AuthResultMap"
+            parameterType="map">
+        select
+        <include refid="getAuthColumn"/>
+        from argus.t_argus_system_auth a
+        <where>
+            <include refid="getAuthCondition"/>
+        </where>
+        order by update_time desc
+    </select>
+
+    <!-- 查询权限列表分页 -->
+    <select id="getAuthBeanList" resultMap="AuthResultMap"
+            parameterType="map">
+        select
+        <include refid="getAuthColumn"/>
+        from argus.t_argus_system_auth a
+        <where>
+            <include refid="getAuthCondition"/>
+        </where>
+        order by update_time desc
+        <if test="rows!=null and rows != 0">
+            limit #{pageStart},#{rows}
+        </if>
+    </select>
+
+    <!-- 查询权限列表记录数 -->
+    <select id="getAuthBeanListCount" resultType="INT"
+            parameterType="map">
+        select count(0) from argus.t_argus_system_auth a
+        <where>
+            <include refid="getAuthCondition"/>
+        </where>
+    </select>
+
+    <select id="getAuthListByIds" parameterType="map" resultMap="AuthResultMap">
+        select
+        <include refid="getAuthColumn"/>
+        from argus.t_argus_system_auth a
+        where enable = 0 AND id in(
+        <foreach collection="list" item="item" index="index" separator=",">
+            #{item}
+        </foreach>
+
+        )
+    </select>
+
+    <update id="updateParentInfo" parameterType="map">
+        update argus.t_argus_system_auth
+        set parent_name = #{authName}
+        where parent_id = #{id}
+    </update>
+
+
+</mapper>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorator="layout/analyFullPageLayout">
+<head>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <!-- Navigation -->
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">节点PV监控</h1>
+            </div>
+        </div>
+
+        <div class="row" style="font-size:16px;">
+            <div class="col-md-2">所属节点：</div>
+            <div class="col-md-3">
+                <select id="nodeKey" th:if="!${#lists.isEmpty(nodelist)}"
+                        style="height:29px;border-radius:3px;border:1px solid #DDDDDD;">
+                    <option th:each="node : ${nodelist}"
+                            th:value="${node.nodeKey}"
+                            th:text="${node.nodeName}">
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <button class="btn btn-primary" onclick="onQueryClickNode();">查&nbsp;&nbsp;询
+                </button>
+            </div>
+        </div>
+        <br/>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-area-chart fa-fw"></i>节点PV对比(周期:分钟)
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="flot-chart">
+                            <div class="flot-chart-content" id="line-chart-moving1"></div>
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-area-chart fa-fw"></i>节点PV对比(周期:小时)
+                    </div>
+                    <div class="panel-body">
+                        <div class="flot-chart">
+                            <div class="flot-chart-content" id="line-chart-moving2"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-area-chart fa-fw"></i>节点PV汇总(周期:天)
+                    </div>
+                    <div class="panel-body">
+                        <div class="flot-chart">
+                            <div class="flot-chart-content" id="bar-chart"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
